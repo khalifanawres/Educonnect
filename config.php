@@ -15,9 +15,9 @@ class config
 
             $username="root";
 
-            $password ="password";
+            $password ="";
 
-            $dbname="2a7";
+            $dbname="educonnect";
 
             try {
 
@@ -37,7 +37,7 @@ class config
 
                
 
-                echo "connected successfully";
+             
 
             } catch (Exception $e) {
 
