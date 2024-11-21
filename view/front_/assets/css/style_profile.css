@@ -1,0 +1,102 @@
+#bd {
+    background: #f5f5f5;
+    margin-top: 20px;
+}
+
+.ui-w-80 {
+    width: 80px !important;
+    height: auto;
+}
+
+/* Couleurs des boutons */
+.btn-default {
+    border-color: rgba(0, 205, 251, 0.1); /* Couleur ajustée */
+    background: rgba(0, 0, 0, 0);
+    color: #00cdfb; /* Correspond à la couleur du bouton */
+}
+
+.btn-outline-primary {
+    border-color: #00cdfb; /* Couleur ajustée */
+    background: transparent;
+    color: #00cdfb;
+}
+.form-label{
+    color: black; 
+}
+.btn {
+    cursor: pointer;
+}
+
+/* Couleurs pour les boutons sociaux */
+.btn-facebook {
+    border-color: rgba(0, 0, 0, 0);
+    background: #3B5998;
+    color: #fff;
+}
+
+.btn-instagram {
+    border-color: rgba(0, 0, 0, 0);
+    background: #000;
+    color: #fff;
+}
+
+/* Cartes avec une ombre légère */
+.card {
+    background-clip: padding-box;
+    box-shadow: 0 1px 4px rgba(0, 205, 251, 0.1); /* Ombre avec une touche de bleu */
+}
+
+.row-bordered {
+    overflow: hidden;
+}
+
+/* Input de fichier caché */
+.account-settings-fileinput {
+    position: absolute;
+    visibility: hidden;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+/* Liens de navigation actifs */
+.account-settings-links .list-group-item.active {
+    font-weight: bold !important;
+    background-color: #00cdfb !important; /* Fond bleu pour l'élément actif */
+    color: #fff !important;
+}
+
+/* Liens de navigation - mode clair */
+.light-style .account-settings-links .list-group-item {
+    padding: 0.85rem 1.5rem;
+    border-color: rgba(0, 205, 251, 0.1) !important;
+}
+
+.light-style .account-settings-links .list-group-item.active {
+    color: #fff !important; /* Texte blanc pour l'élément actif */
+}
+
+/* Liens de navigation - mode sombre */
+.dark-style .account-settings-links .list-group-item {
+    padding: 0.85rem 1.5rem;
+    border-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+.dark-style .account-settings-links .list-group-item.active {
+    color: #00cdfb !important; /* Bleu pour le mode sombre */
+}
+
+/* Texte en couleur claire */
+.text-light {
+    color: #babbbc !important;
+}
+
+/* Menu déroulant personnalisé */
+.profile-menu .dropdown-menu {
+    background-color: #f5f5f5;
+    border-color: #00cdfb;
+    color: #4E5155;
+}
+.bloc{
+    display: flex;
+}

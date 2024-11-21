@@ -1,0 +1,13 @@
+.feedback {
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+.feedback.success {
+    color: green;
+}
+.feedback.warning {
+    color: orange;
+}
+.feedback.error {
+    color: red;
+}
