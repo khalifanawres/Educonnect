@@ -42,7 +42,7 @@ $competitions = $competitionController->listCompetitions();
                         echo "<td>" . htmlspecialchars($competition['duree']) . " jours</td>";
                         echo "<td>" . htmlspecialchars($competition['contenu']) . "</td>";
                         echo "<td>
-                                <a href='edit_competition.php?id=" . $competition['id'] . "' class='edit-btn'>Modifier</a>
+                                <a href='update_competition.php?id=" . $competition['id'] . "' class='edit-btn'>Modifier</a>
                                 <a href='delete_competition.php?id=" . $competition['id'] . "' class='delete-btn' onclick='return confirm(\"Êtes-vous sûr de vouloir supprimer cette compétition ?\");'>Supprimer</a>
                               </td>";
                         echo "</tr>";
