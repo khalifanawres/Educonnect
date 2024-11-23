@@ -61,32 +61,28 @@ class CompetitionController
         }
     }
 
-    function updateCompetition($competition, $id)
+    function updateCompetition($competition)
     {
-        try {
-            $db = config::getConnexion();
+        $db = config::getConnexion();
 
-            $query = $db->prepare(
-                'UPDATE competitions SET 
-                    nom = :nom,
-                    description = :description,
-                    duree = :duree,
-                    contenu = :contenu
-                WHERE id = :id'
-            );
+        $query = $db->prepare(
+            'UPDATE competitions SET 
+                nom = :nom,
+                description = :description,
+                duree = :duree,
+                contenu = :contenu
+            WHERE id = :id'
+        );
 
-            $query->execute([
-                'id' => $id,
-                'nom' => $competition->getNom(),
-                'description' => $competition->getDescription(),
-                'duree' => $competition->getDuree(),
-                'contenu' => $competition->getContenu()
-            ]);
+        $query->execute([ 
+            'id' => $competition->getId(),
+            'nom' => $competition->getNom(),
+            'description' => $competition->getDescription(),
+            'duree' => $competition->getDuree(),
+            'contenu' => $competition->getContenu()
+        ]);
 
-            echo $query->rowCount() . " records UPDATED successfully <br>";
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage(); 
-        }
+        echo $query->rowCount() . " record(s) UPDATED successfully <br>";
     }
 
     function showCompetition($id)
