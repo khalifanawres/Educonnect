@@ -1,5 +1,4 @@
 <?php
-// Include necessary files
 include_once('../../../controller/CompetitionController.php');
 include_once('../../../Model/Competition.php');
 
@@ -9,10 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $duree = trim($_POST['duree']);
     $contenu = trim($_POST['contenu']);
 
-    // Server-side validation
     $erreurs = [];
 
-    // Validation checks
     if (empty($nom)) {
         $erreurs[] = "Le champ 'Nom' est obligatoire.";
     }
@@ -26,20 +23,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erreurs[] = "Le champ 'Contenu' est obligatoire.";
     }
 
-    // If there are validation errors, show them
     if (!empty($erreurs)) {
         session_start();
-        $_SESSION['errors'] = $erreurs; // Store errors in session
+        $_SESSION['errors'] = $erreurs; 
     } else {
-        // Create a new competition object
         $competitionController = new CompetitionController();
         $competition = new Competition(null, $nom, $description, (int)$duree, $contenu);
 
-        // Add the competition to the database
         $competitionController->addCompetition($competition);
 
-        // Redirect to list_competitions page
-        header('Location: list_competitions.php');
+        header('Location: ../../FrontOffice/Competitions/list_competitions_form.php');
         exit;
     }
 }

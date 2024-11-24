@@ -7,15 +7,13 @@ class Participation
     private $competition_id;
     private $date_participation;
 
-    // Constructor
     public function __construct($user_id, $competition_id, $date_participation = null)
     {
         $this->user_id = $user_id;
         $this->competition_id = $competition_id;
-        $this->date_participation = $date_participation ? $date_participation : date("Y-m-d H:i:s"); // Default to current timestamp
+        $this->date_participation = $date_participation ? $date_participation : date("Y-m-d H:i:s"); 
     }
 
-    // Getters and Setters
     public function getId()
     {
         return $this->id;
