@@ -1,5 +1,10 @@
 <?php 
-include_once('../../BackOffice/Competitions/list_competitions.php');
+// include_once('../../BackOffice/Competitions/list_competitions.php');
+require('../../../controller/CompetitionController.php');
+
+$compController = new CompetitionController();
+$competitions =  $compController->listCompetitions();
+
 ?>
 
 <!DOCTYPE html>
@@ -79,7 +84,7 @@ include_once('../../BackOffice/Competitions/list_competitions.php');
                   <a href="pricing.html">Nos cours</a>
                </li>
                <li>
-                  <a href="resserler.html">compétitions</a>
+                  <a href="list_competitions_form.php">compétitions</a>
                </li>
                <li>
                   <a href="vpshost.html">Projets</a>
@@ -88,13 +93,13 @@ include_once('../../BackOffice/Competitions/list_competitions.php');
                   <a href="#0">Réclamation<i class="fas fa-chevron-down"></i></a>
                   <ul class="sub-menu">
                      <li class="subtwohober">
-                        <a href="contact professeur.html">
+                        <a href="../contact professeur.html">
                            <span class="icon"><i class="fa-brands fa-audible"></i></span>
                            <span>contact professeur</span>
                         </a>
                      </li>
                      <li class="subtwohober">
-                        <a href="contact administrateur.html">
+                        <a href="../contact administrateur.html">
                            <span class="icon"><i class="fa-solid fa-server"></i></span>
                            <span>contact administrateur</span>
                         </a>
@@ -173,6 +178,7 @@ include_once('../../BackOffice/Competitions/list_competitions.php');
                   <table class="competitions-table">
                       <thead>
                           <tr>
+                              <th>user</th>
                               <th>Nom</th>
                               <th>Description</th>
                               <th>Durée</th>
@@ -185,13 +191,13 @@ include_once('../../BackOffice/Competitions/list_competitions.php');
                           if ($competitions) {
                               foreach ($competitions as $competition) {
                                   echo "<tr>";
+                                  echo "<td><img src='/Educonnect/user.png' alt='Image par défaut' style='width: 50px; height: 50px;'></td>";
                                   echo "<td>" . htmlspecialchars($competition['nom']) . "</td>";
                                   echo "<td>" . htmlspecialchars($competition['description']) . "</td>";
                                   echo "<td>" . htmlspecialchars($competition['duree']) . " jours</td>";
                                   echo "<td>" . htmlspecialchars($competition['contenu']) . "</td>";
                                   echo "<td>
-                                          <a href='update_competition_form.php?id=" . $competition['id'] . "' class='cmn--btn'>Modifier</a>
-                                          <a href='delete_competition_form.php?id=" . $competition['id'] . "' class='cmn--btn' onclick='return confirm(\"Êtes-vous sûr de vouloir supprimer cette compétition ?\");'>Supprimer</a>
+                                          <a href='update_competition_form.php?id=" . $competition['id'] . "' class='cmn--btn'>Details</a>
                                         </td>";
                                   echo "</tr>";
                               }

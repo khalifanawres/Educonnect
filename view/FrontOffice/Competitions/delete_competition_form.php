@@ -1,5 +1,5 @@
 <?php 
-include_once('../../BackOffice/Competitions/update_competition.php'); 
+include_once('../../BackOffice/Competitions/delete_competition.php');
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +32,7 @@ include_once('../../BackOffice/Competitions/update_competition.php');
    <!--main css-->
    <link rel="stylesheet" href="../assets/css/main.css">
    <!--competition css-->
-   <link rel="stylesheet" href="../assets/css/update_competition.css">
+   <link rel="stylesheet" href="../assets/css/list_competitions.css">
 </head>
 
 <body>
@@ -155,62 +155,62 @@ include_once('../../BackOffice/Competitions/update_competition.php');
 </section>
 <!--Banner End-->
 
-<!--Update Competitions Here-->
+<!--Competitions Here-->
 <div class="competitions__section pt-80">
-       <div class="competitions_inner">
-           <div class="container">
-             <div class="section__header center mb-5">
-                <h2 class="text-black wow fadeInDown" data-wow-delay="0.2s">
-                   Modifier la <span class="text-base">Compétition</span>
-                </h2>
-                <p class="text-black wow fadeInDown" data-wow-delay="0.4s">
-                   Mettez à jour les informations de la compétition.
-                </p>
-             </div>
-
-             <div class="row justify-content-center align-items-center">
-                <div class="col-lg-12">
-                  <div class="competitions__card__wrap">
-                      <?php if (!empty($errors)): ?>
-                          <div class="error-messages">
-                              <?php foreach ($errors as $error): ?>
-                                  <p class="error-message"><?= htmlspecialchars($error); ?></p>
-                              <?php endforeach; ?>
-                          </div>
-                      <?php endif; ?>
-
-                      <form method="POST">
-                          <div class="form-group">
-                              <label for="nom">Nom :</label>
-                              <input type="text" id="nom" name="nom" value="<?php echo htmlspecialchars($competitionData['nom']); ?>" required>
-                          </div>
-
-                          <div class="form-group">
-                              <label for="description">Description :</label>
-                              <textarea id="description" name="description" required><?php echo htmlspecialchars($competitionData['description']); ?></textarea>
-                          </div>
-
-                          <div class="form-group">
-                              <label for="duree">Durée (en jours) :</label>
-                              <input type="number" id="duree" name="duree" value="<?php echo htmlspecialchars($competitionData['duree']); ?>" required>
-                          </div>
-
-                          <div class="form-group">
-                              <label for="contenu">Contenu :</label>
-                              <textarea id="contenu" name="contenu" required><?php echo htmlspecialchars($competitionData['contenu']); ?></textarea>
-                          </div>
-
-                          <div class="form-group">
-                              <button type="submit" class="cmn--btn">Mettre à jour la compétition</button>
-                          </div>
-                      </form>
-                  </div>
-               </div>
-             </div>
+   <div class="competitions_inner">
+       <div class="container">
+         <div class="section__header center mb-5">
+            <h2 class="text-black wow fadeInDown" data-wow-delay="0.2s">
+               Liste des <span class="text-base">Compétitions</span>
+            </h2>
+            <p class="text-black wow fadeInDown" data-wow-delay="0.4s">
+               Consultez et gérez les compétitions en toute simplicité.
+            </p>
+         </div>
+           <div class="row justify-content-center align-items-center">
+            <div class="col-lg-12">
+              <div class="competitions__card__wrap">
+                  <table class="competitions-table">
+                      <thead>
+                          <tr>
+                              <th>Nom</th>
+                              <th>Description</th>
+                              <th>Durée</th>
+                              <th>Contenu</th>
+                              <th>Actions</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <?php
+                          if ($competitions) {
+                              foreach ($competitions as $competition) {
+                                  echo "<tr>";
+                                  echo "<td>" . htmlspecialchars($competition['nom']) . "</td>";
+                                  echo "<td>" . htmlspecialchars($competition['description']) . "</td>";
+                                  echo "<td>" . htmlspecialchars($competition['duree']) . " jours</td>";
+                                  echo "<td>" . htmlspecialchars($competition['contenu']) . "</td>";
+                                  echo "<td>
+                                          <a href='update_competition_form.php?id=" . $competition['id'] . "' class='cmn--btn'>Modifier</a>
+                                          <a href='delete_competition_form.php?id=" . $competition['id'] . "' class='cmn--btn' onclick='return confirm(\"Êtes-vous sûr de vouloir supprimer cette compétition ?\");'>Supprimer</a>
+                                        </td>";
+                                  echo "</tr>";
+                              }
+                          } else {
+                              echo "<tr><td colspan='5'>Aucune compétition trouvée.</td></tr>";
+                          }
+                          ?>
+                      </tbody>
+                  </table>
+              </div>
+           </div>
+            <div class="col-lg-12 text-center">
+                  <a href="add_competition_form.php" class="cmn--btn"><span>Ajouter une nouvelle compétition</span></a>
+            </div>
            </div>
        </div>
-    </div>
-<!--Update Competitions End-->
+   </div>
+</div>
+<!--Competitions End-->
 
 <!--Footer Here-->
 <footer class="footer-section section-bg pt-120">

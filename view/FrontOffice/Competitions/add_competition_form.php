@@ -75,7 +75,7 @@
                   <a href="pricing.html">Nos cours</a>
                </li>
                <li>
-                  <a href="resserler.html">compétitions</a>
+                  <a href="list_competitions_form.php">compétitions</a>
                </li>
                <li>
                   <a href="vpshost.html">Projets</a>
@@ -84,13 +84,13 @@
                   <a href="#0">Réclamation<i class="fas fa-chevron-down"></i></a>
                   <ul class="sub-menu">
                      <li class="subtwohober">
-                        <a href="contact professeur.html">
+                        <a href="../contact professeur.html">
                            <span class="icon"><i class="fa-brands fa-audible"></i></span>
                            <span>contact professeur</span>
                         </a>
                      </li>
                      <li class="subtwohober">
-                        <a href="contact administrateur.html">
+                        <a href="../contact administrateur.html">
                            <span class="icon"><i class="fa-solid fa-server"></i></span>
                            <span>contact administrateur</span>
                         </a>
