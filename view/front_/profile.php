@@ -1,4 +1,31 @@
+<?php
+session_start();
 
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Récupérer les informations de l'utilisateur depuis la session
+$user = $_SESSION['user'];
+$userId = $user['id']; // Par exemple, si l'ID est stocké dans 'id' dans la session
+$userName = $user['nom']; // Nom de l'utilisateur
+$userEmail = $user['email']; // Email de l'utilisateur
+$userPhoto = isset($user['photo']) ? $user['photo'] : 'assets/img/profil/image.jpg'; // Photo de profil (par défaut si vide)
+$userDob = isset($user['dob']) ? $user['dob'] : null; // Date de naissance
+$userTel = isset($user['tel']) ? $user['tel'] : null; // Téléphone
+
+/*if (isset($_SESSION['success'])) {
+   echo "<div class='alert alert-success'>" . $_SESSION['success'] . "</div>";
+   unset($_SESSION['success']);
+}
+
+if (isset($_SESSION['error'])) {
+   echo "<div class='alert alert-danger'>" . $_SESSION['error'] . "</div>";
+   unset($_SESSION['error']);
+}*/
+?>
 <!--Website: wwww.codingdung.com-->
 <!DOCTYPE html>
 <html lang="en">
@@ -190,91 +217,90 @@
   </section>
   <!--Banner End-->
 
-    <div id="bd" class="container light-style flex-grow-1 container-p-y">
-        <div class="card overflow-hidden">
-            <div class="row no-gutters row-bordered row-border-light">
-                <div class="col-md-3 pt-0">
-                    <div class="list-group list-group-flush account-settings-links">
-                        <a class="list-group-item list-group-item-action active" data-toggle="list"
-                            href="#account-general">General</a>
-                        <a class="list-group-item list-group-item-action" data-toggle="list"
-                            href="#account-change-password">Change password</a>
-                    </div>
+  <div id="bd" class="container light-style flex-grow-1 container-p-y">
+    <div class="card overflow-hidden">
+        <div class="row no-gutters row-bordered row-border-light">
+            <div class="col-md-3 pt-0">
+                <div class="list-group list-group-flush account-settings-links">
+                    <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">General</a>
+                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Change password</a>
                 </div>
-                <div class="col-md-9">
-                    <div class="tab-content">
-                        <div class="tab-pane fade active show" id="account-general">
-                            <div class="card-body media align-items-center">
-                                <div class="bloc">
-                                    <div>
-                                        <img src="assets/img/profil/image.jpg" alt
-                                    class="d-block ui-w-80">
-                                    </div>
-                                    <div>
-                                        <p>ID: 12345</p>
-                                        <p>Nom: ahmed ayadi</p>
-                                        <p>E-mail: abdelhamid.ayadi@esprit.tn</p>
-                                    </div>
+            </div>
+            <div class="col-md-9">
+                <div class="tab-content">
+                    <div class="tab-pane fade active show" id="account-general">
+                        <div class="card-body media align-items-center">
+                            <div class="bloc">
+                                <div>
+                                    <!-- Afficher l'image de profil -->
+                                    <img src="<?= $userPhoto ?>" alt class="d-block ui-w-80">
                                 </div>
-                                <div class="media-body ml-4">
-                                    <label class="btn btn-outline-primary">
-                                        Upload new photo
-                                        <input type="file" class="account-settings-fileinput">
-                                    </label> &nbsp;
-                                    <button type="button" class="btn btn-default md-btn-flat">Reset</button>
-                                    <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                                <div>
+                                    <p>ID: <?= $userId ?></p>
+                                    <p>Nom: <?= $userName ?></p>
+                                    <p>E-mail: <?= $userEmail ?></p>
                                 </div>
                             </div>
-                            <hr class="border-light m-0">
-                            <div class="card-body">
+                            <div class="media-body ml-4">
+                                <label class="btn btn-outline-primary">
+                                    Upload new photo
+                                    <input type="file" class="account-settings-fileinput" name="profile_photo" onchange="uploadPhoto(event)">
+                                </label> 
+                                <button type="button" class="btn btn-default md-btn-flat" onclick="resetPhoto()">Reset</button>
+                                <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                            </div>
+                        </div>
+                        <hr class="border-light m-0">
+                        <div class="card-body">
+                            <form method="POST" action="update_profile.php">
                                 <div class="form-group">
                                     <label class="form-label">ID</label>
-                                    <input type="text" class="form-control mb-1" value="12345" readonly>
+                                    <input type="text" class="form-control mb-1" value="<?= $userId ?>" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Name</label>
-                                    <input type="text" class="form-control" value="Nelle Maxwell">
+                                    <input type="text" class="form-control" name="name" value="<?= $userName ?>">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">E-mail</label>
-                                    <input type="text" class="form-control mb-1" value="nmaxwell@mail.com">
+                                    <input type="email" class="form-control mb-1" name="email" value="<?= $userEmail ?>">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Date of Birth</label>
-                                    <input type="date" class="form-control mb-1">
+                                    <input type="date" class="form-control mb-1" name="dob" value="<?= $userDob ?>">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Tel</label>
-                                    <input type="text" class="form-control mb-1" value="12 345 678">
+                                    <input type="text" class="form-control mb-1" name="tel" value="<?= $userTel ?>">
                                 </div>
-                            </div>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </form>
                         </div>
-                        <div class="tab-pane fade" id="account-change-password">
-                            <div class="card-body pb-2">
-                                <div class="form-group">
-                                    <label class="form-label">Current password</label>
-                                    <input type="password" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">New password</label>
-                                    <input type="password" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Repeat new password</label>
-                                    <input type="password" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        
                     </div>
+                    <div class="tab-pane fade" id="account-change-password">
+    <form method="POST" action="update_password.php">
+        <div class="card-body pb-2">
+            <div class="form-group">
+                <label class="form-label">Mot de passe actuel</label>
+                <input type="password" class="form-control" name="current_password" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nouveau mot de passe</label>
+                <input type="password" class="form-control" name="new_password" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Répéter le nouveau mot de passe</label>
+                <input type="password" class="form-control" name="repeat_password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Mettre à jour le mot de passe</button>
+        </div>
+    </form>
+</div>
                 </div>
             </div>
         </div>
-        <div class="text-right mt-3">
-            <button type="button" class="btn btn-primary">Save changes</button>&nbsp;
-            <button type="button" class="btn btn-default">Cancel</button>
-        </div>
     </div>
+</div>
 
     <!--Footer Here-->
 <footer id="footer" class="footer-section section-bg pt-120">
@@ -467,6 +493,24 @@
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript"></script>
+    <script>
+    // Fonction pour mettre à jour l'image de profil (en cas de changement)
+    function uploadPhoto(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.querySelector('.ui-w-80').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // Fonction pour réinitialiser la photo à l'image par défaut
+    function resetPhoto() {
+        document.querySelector('.ui-w-80').src = 'assets/img/profil/image.jpg';
+    }
+</script>
 </body>
 
 </html>

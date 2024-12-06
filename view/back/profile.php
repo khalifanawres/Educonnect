@@ -1,3 +1,33 @@
+<?php
+include '../../controller/UserController.php';
+session_start();
+
+if (!isset($_SESSION['user'])) {
+  header("Location: /..//projet/view/front_/login.php");
+  exit();
+}
+
+// Récupérer l'ID utilisateur depuis la session
+$userId = $_SESSION['user']['id'];
+
+// Récupérer les données utilisateur depuis la base
+$userController = new UserController();
+$user = $userController->getUserById($userId);
+
+if (!$user) {
+    echo "Erreur : Impossible de récupérer les informations de l'utilisateur.";
+    exit();
+}
+
+// Préparer les données pour affichage
+$userName = $user['nom'] ?? '';
+$userEmail = $user['email'] ?? '';
+$userDob = $user['dob'] ?? '';
+$userTel = $user['tel'] ?? '';
+$userPhoto = $user['photo'] ?? null;
+?>
+
+
 <!--
 =========================================================
 * Argon Dashboard 3 - v2.1.0
@@ -93,13 +123,31 @@
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="../pages/profile.html">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Profile</span>
-          </a>
-        </li>
+  <a class="nav-link" data-bs-toggle="collapse" href="#profileMenu" role="button" aria-expanded="false" aria-controls="profileMenu">
+    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+      <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
+    </div>
+    <span class="nav-link-text ms-1">Profile</span>
+  </a>
+  <div class="collapse" id="profileMenu">
+    <ul class="nav ms-4">
+      <!-- Settings -->
+      <li class="nav-item">
+        <a class="nav-link" href="profile.php">
+          <i class="ni ni-settings-gear-65 text-dark text-sm opacity-10"></i>
+          <span class="nav-link-text">Settings</span>
+        </a>
+      </li>
+      <!-- Changer le mot de passe -->
+      <li class="nav-item">
+        <a class="nav-link" href="change-password.php">
+          <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
+          <span class="nav-link-text">Changer le mot de passe</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</li>
       </ul>
     </div>
   </aside>
@@ -231,24 +279,26 @@
             </div>
           </div>
           <div class="col-auto my-auto">
+          <div class="col-auto my-auto">
             <div class="h-100">
               <h5 class="mb-1">
-                Sayo Kravits
+              <?= $userName ?>
               </h5>
               <p class="mb-0 font-weight-bold text-sm">
-                Public Relations
+              <?= $userId ?>
               </p>
             </div>
+          </div>
           </div>
           <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
             <div class="nav-wrapper position-relative end-0">
               <ul class="nav nav-pills nav-fill p-1" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link mb-0 px-0 py-1 active d-flex align-items-center justify-content-center " data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="true">
-                    <i class="ni ni-app"></i>
-                    <span class="ms-2">App</span>
-                  </a>
-                </li>
+              <li class="nav-item">
+  <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center" href="logout.php" role="button">
+    <i class="ni ni-user-run"></i>
+    <span class="ms-2">Déconnexion</span>
+  </a>
+</li>
                 <li class="nav-item">
                   <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center " data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="false">
                     <i class="ni ni-email-83"></i>
@@ -268,174 +318,93 @@
       </div>
     </div>
     <div class="container-fluid py-4">
-      <div class="row">
+    <div class="row">
         <div class="col-md-8">
-          <div class="card">
-            <div class="card-header pb-0">
-              <div class="d-flex align-items-center">
-                <p class="mb-0">Edit Profile</p>
-                <button class="btn btn-primary btn-sm ms-auto">Settings</button>
-              </div>
+            <div class="card">
+                <div class="card-header pb-0">
+                    <h5 class="mb-0">Modifier le profil</h5>
+                </div>
+                <div class="card-body">
+                <form action="update_user.php" method="POST" enctype="multipart/form-data">
+    <div class="row">
+        <!-- ID utilisateur (readonly) -->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="id" class="form-control-label">ID</label>
+                <input class="form-control" type="text" id="id" name="id_display" value="<?= htmlspecialchars($userId) ?>" readonly>
+                <input type="hidden" name="id" value="<?= htmlspecialchars($userId) ?>">
             </div>
-            <div class="card-body">
-              <p class="text-uppercase text-sm">User Information</p>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Username</label>
-                    <input class="form-control" type="text" value="lucky.jesse">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Email address</label>
-                    <input class="form-control" type="email" value="jesse@example.com">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">First name</label>
-                    <input class="form-control" type="text" value="Jesse">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Last name</label>
-                    <input class="form-control" type="text" value="Lucky">
-                  </div>
-                </div>
-              </div>
-              <hr class="horizontal dark">
-              <p class="text-uppercase text-sm">Contact Information</p>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Address</label>
-                    <input class="form-control" type="text" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">City</label>
-                    <input class="form-control" type="text" value="New York">
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Country</label>
-                    <input class="form-control" type="text" value="United States">
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Postal code</label>
-                    <input class="form-control" type="text" value="437300">
-                  </div>
-                </div>
-              </div>
-              <hr class="horizontal dark">
-              <p class="text-uppercase text-sm">About me</p>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">About me</label>
-                    <input class="form-control" type="text" value="A beautiful Dashboard for Bootstrap 5. It is Free and Open Source.">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-        <div class="col-md-4">
-          <div class="card card-profile">
-            <img src="assets/img/bg-profile.jpg" alt="Image placeholder" class="card-img-top">
-            <div class="row justify-content-center">
-              <div class="col-4 col-lg-4 order-lg-2">
-                <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
-                  <a href="javascript:;">
-                    <img src="assets/img/team-2.jpg" class="rounded-circle img-fluid border border-2 border-white">
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="card-header text-center border-0 pt-0 pt-lg-2 pb-4 pb-lg-3">
-              <div class="d-flex justify-content-between">
-                <a href="javascript:;" class="btn btn-sm btn-info mb-0 d-none d-lg-block">Connect</a>
-                <a href="javascript:;" class="btn btn-sm btn-info mb-0 d-block d-lg-none"><i class="ni ni-collection"></i></a>
-                <a href="javascript:;" class="btn btn-sm btn-dark float-right mb-0 d-none d-lg-block">Message</a>
-                <a href="javascript:;" class="btn btn-sm btn-dark float-right mb-0 d-block d-lg-none"><i class="ni ni-email-83"></i></a>
-              </div>
-            </div>
-            <div class="card-body pt-0">
-              <div class="row">
-                <div class="col">
-                  <div class="d-flex justify-content-center">
-                    <div class="d-grid text-center">
-                      <span class="text-lg font-weight-bolder">22</span>
-                      <span class="text-sm opacity-8">Friends</span>
-                    </div>
-                    <div class="d-grid text-center mx-4">
-                      <span class="text-lg font-weight-bolder">10</span>
-                      <span class="text-sm opacity-8">Photos</span>
-                    </div>
-                    <div class="d-grid text-center">
-                      <span class="text-lg font-weight-bolder">89</span>
-                      <span class="text-sm opacity-8">Comments</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="text-center mt-4">
-                <h5>
-                  Mark Davis<span class="font-weight-light">, 35</span>
-                </h5>
-                <div class="h6 font-weight-300">
-                  <i class="ni location_pin mr-2"></i>Bucharest, Romania
-                </div>
-                <div class="h6 mt-4">
-                  <i class="ni business_briefcase-24 mr-2"></i>Solution Manager - Creative Tim Officer
-                </div>
-                <div>
-                  <i class="ni education_hat mr-2"></i>University of Computer Science
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <footer class="footer pt-3  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                made with <i class="fa fa-heart"></i> by
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
-                for a better web.
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About Us</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">License</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
+
+    <div class="row">
+        <!-- Nom -->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="nom" class="form-control-label">Nom</label>
+                <input class="form-control" type="text" id="nom" name="nom" value="<?= htmlspecialchars($userName) ?>" required>
+            </div>
+        </div>
+        <!-- Email -->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="email" class="form-control-label">Email</label>
+                <input class="form-control" type="email" id="email" name="email" value="<?= htmlspecialchars($userEmail) ?>" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Date de naissance -->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="dob" class="form-control-label">Date de naissance</label>
+                <input class="form-control" type="date" id="dob" name="dob" value="<?= htmlspecialchars($userDob) ?>">
+            </div>
+        </div>
+        <!-- Téléphone -->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="tel" class="form-control-label">Téléphone</label>
+                <input class="form-control" type="tel" id="tel" name="tel" value="<?= htmlspecialchars($userTel) ?>">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Photo actuelle -->
+        <div class="col-md-6">
+        <div class="form-group">
+            <label for="current-photo" class="form-control-label">Photo actuelle</label><br>
+            <?php if ($userPhoto): ?>
+                <img src="<?= htmlspecialchars($userPhoto) ?>" alt="Photo actuelle" id="current-photo" style="width: 150px; height: 150px; object-fit: cover; border: 1px solid #ddd;">
+                <input type="hidden" name="current_photo" value="<?= htmlspecialchars($userPhoto) ?>">
+            <?php else: ?>
+                <p>Aucune photo disponible</p>
+                <input type="hidden" name="current_photo" value="">
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <!-- Modifier la photo -->
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="photo" class="form-control-label">Modifier la photo</label>
+            <input class="form-control" type="file" id="photo" name="photo" accept="image/*">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-end">
+            <button type="submit" class="btn btn-primary">Mettre à jour</button>
+        </div>
+    </div>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
   </div>
   <div class="fixed-plugin">
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">

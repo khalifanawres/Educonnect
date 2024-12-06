@@ -1,5 +1,20 @@
 <?php
 include '../../controller/UserController.php';
+session_start();
+
+if (!isset($_SESSION['user'])) {
+  header("Location: /..//projet/view/front_/login.php");
+  exit();
+}
+
+// Récupérer les informations de l'utilisateur depuis la session
+$user = $_SESSION['user'];
+$userId = $user['id'];
+$userName = $user['nom'];
+$userEmail = $user['email'];
+$userDob = isset($user['dob']) ? $user['dob'] : null; // Date de naissance
+$userTel = isset($user['tel']) ? $user['tel'] : null; // Téléphone
+
 $userC = new UserController();
 $list = $userC->listUser();
 ?>
@@ -97,13 +112,31 @@ $list = $userC->listUser();
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="profile.php">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Profile</span>
-          </a>
-        </li>
+  <a class="nav-link" data-bs-toggle="collapse" href="#profileMenu" role="button" aria-expanded="false" aria-controls="profileMenu">
+    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+      <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
+    </div>
+    <span class="nav-link-text ms-1">Profile</span>
+  </a>
+  <div class="collapse" id="profileMenu">
+    <ul class="nav ms-4">
+      <!-- Settings -->
+      <li class="nav-item">
+        <a class="nav-link" href="profile.php">
+          <i class="ni ni-settings-gear-65 text-dark text-sm opacity-10"></i>
+          <span class="nav-link-text">Settings</span>
+        </a>
+      </li>
+      <!-- Changer le mot de passe -->
+      <li class="nav-item">
+        <a class="nav-link" href="change-password.php">
+          <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
+          <span class="nav-link-text">Changer le mot de passe</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</li>
       </ul>
     </div>
   </aside>
@@ -122,6 +155,51 @@ $list = $userC->listUser();
       </div>
     </nav>
     <!-- End Navbar -->
+    <div class="card shadow-lg mx-4 card-profile-bottom">
+      <div class="card-body p-3">
+        <div class="row gx-4">
+          <div class="col-auto">
+            <div class="avatar avatar-xl position-relative">
+              <img src="<?= $userPhoto ?>" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+            </div>
+          </div>
+          <div class="col-auto my-auto">
+            <div class="h-100">
+              <h5 class="mb-1">
+              <?= $userName ?>
+              </h5>
+              <p class="mb-0 font-weight-bold text-sm">
+              <?= $userId ?>
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+            <div class="nav-wrapper position-relative end-0">
+              <ul class="nav nav-pills nav-fill p-1" role="tablist">
+              <li class="nav-item">
+  <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center" href="logout.php" role="button">
+    <i class="ni ni-user-run"></i>
+    <span class="ms-2">Déconnexion</span>
+  </a>
+</li>
+                <li class="nav-item">
+                  <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center " data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="false">
+                    <i class="ni ni-email-83"></i>
+                    <span class="ms-2">Messages</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+  <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center" href="profile.php" role="tab" aria-selected="false">
+    <i class="ni ni-settings-gear-65"></i>
+    <span class="ms-2">Settings</span>
+  </a>
+</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container-fluid py-4">
     <div class="row">
       <div class="col-12">

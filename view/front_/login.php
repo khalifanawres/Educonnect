@@ -1,43 +1,30 @@
 <?php
-
 include '../../controller/UserController.php';
-
 
 $error = "";
 
-$offer= null;
-// create an instance of the controller
-$UserController = new UserController();
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+   $userController = new UserController();
 
-if (
-    isset($_POST["nom"])  && $_POST["email"] && $_POST["mot_de_passe"] && $_POST["role"] 
-) {
-    if (
-        !empty($_POST["nom"])  && !empty($_POST["email"]) && !empty($_POST["mot_de_passe"]) && !empty($_POST["role"]))
-    
-     {
-        
-        $offer = new User(
-            null,
-            $_POST['nom'],
-            $_POST['email'],
-            $_POST['mot_de_passe'],
-            $_POST['role']
-        );
-        //
-            
-        $UserController->addUser($offer);
+   $user = new User(
+       null,
+       $_POST['nom'],
+       $_POST['email'],
+       $_POST['mot_de_passe'],
+       $_POST['role']
+   );
 
-       header('Location:login.php');
-    } else
-        $error = "Missing information";
+   $result = $userController->addUser($user);
+
+   if ($result['status'] === 'success') {
+       echo json_encode(['status' => 'success', 'message' => $result['message']]);
+   } else {
+       echo json_encode(['status' => 'error', 'message' => $result['message']]);
+   }
 }
-
-
-
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="zxx">
@@ -162,30 +149,30 @@ if (
         <input type="hidden" name="role" id="role" value="prof">
     <div class="form__grp">
         <label for="nom">Full Name</label>
-        <input type="text" id="nom" name="nom" placeholder="Your Full Name" oninput="validateFullName()" required>
+        <input type="text" id="nom" name="nom" placeholder="Your Full Name" oninput="validateFullName()" >
         <span id="nom_feedback" class="feedback"></span>
     </div>
     <div class="form__grp">
         <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" placeholder="Your Email Address" oninput="validateEmail()" required>
+        <input type="email" id="email" name="email" placeholder="Your Email Address" oninput="validateEmail()" >
         <span id="email_feedback" class="feedback"></span>
     </div>
     <div class="form__grp">
         <label for="mot_de_passe">Your Password</label>
-        <input id="mot_de_passe" type="password" name="mot_de_passe" placeholder="Your Password" oninput="validatePassword()" required>
+        <input id="mot_de_passe" type="password" name="mot_de_passe" placeholder="Your Password" oninput="validatePassword()" >
         <span id="password_feedback" class="feedback"></span>
     </div>
     <div class="form__grp">
         <label for="confirm_password">Confirm Password</label>
-        <input id="confirm_password" type="password" placeholder="Confirm Password" oninput="validateConfirmPassword()" required>
+        <input id="confirm_password" type="password" placeholder="Confirm Password" oninput="validateConfirmPassword()" >
         <span id="confirm_password_feedback" class="feedback"></span>
     </div>
     <div class="form-check form__check d-flex align-items-center">
-        <input class="form-check-input" type="checkbox" id="agree" required>
-        <label class="form-check-label" for="agree">
-            I agree with <a href="#0">user agreement</a> and confirm that I am at least 18 years old!
-        </label>
-    </div>
+    <input class="form-check-input" type="checkbox" id="agree" required>
+    <label class="form-check-label" for="agree">
+        I agree with <a href="user_agreement.php" >user agreement</a> and confirm that I am at least 18 years old!
+    </label>
+</div>
     <div class="create__btn">
         <button type="submit" class="cmn--btn">
             <span>Create an account</span>
@@ -232,39 +219,35 @@ if (
                                 <div class="focus__icon">
                                    <img src="assets/img/modal/flowers.png" alt="f-img">
                                 </div>
-                                <form id="loginForm">
-    <div>
-        <ul class="nav nav-tabs" id="myTabing" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="student-tab " type="button" onclick="setRole('student')" role="tab" aria-controls="homeemail" aria-selected="true" data-bs-toggle="tab">STUDENT</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="prof-tab" type="button" onclick="setRole('prof')" role="tab" aria-controls="contactup" aria-selected="false" data-bs-toggle="tab">PROF</button>
-            </li>
-        </ul>
-    </div>
-    <input type="hidden" id="role" value="prof">
+                                <form id="loginForm" method="POST">
+    
+
+    <!-- Champ email -->
     <div class="form__grp">
         <label for="emailg">Email Address</label>
-        <input type="email" id="emailg" placeholder="Your Email Address.">
+        <input type="email" id="emailg" name="email" placeholder="Your Email Address" >
+        <span id="email_error" class="feedback" style="color: red;"></span>
     </div>
-    <div class="login__signup">
-        <a href="#0">Forgot Your Password?</a>
-    </div>
+
+    <!-- Champ mot de passe -->
     <div class="form__grp">
         <label for="password-field7">Your Password</label>
-        <input id="password-field7" type="password" placeholder="Your Password">
-        <span id="#password-field7" class="fa fa-fw fa-eye field-icon toggle-password7"></span>
-    </div>    
+        <input id="password-field7" type="password" name="password" placeholder="Your Password" >
+        <span id="password_error" class="feedback" style="color: red;"></span>
+    </div>
+
     <div class="create__btn">
-        <button type="button" class="cmn--btn" onclick="handleLogin()">
+        <button type="button" class="cmn--btn" onclick="submitLoginForm();">
             <span>Login account</span>
         </button>
     </div>
-    <div class="signup__text">
-        <p>Don't have an account? <a href="#0">Sign Up</a></p>
+    <div class="forgot-password">
+        <a href="forgot_password.php">forgot password ?</a>
     </div>
 </form>
+
+
+
 
                                 <div class="social__head">
                                    <div class="border__static"></div>
@@ -355,26 +338,27 @@ if (
         
         <div class="form__grp">
             <label for="nom">Full Name</label>
-            <input type="text" id="nom" name="nom" placeholder="Your Full Name" required>
+            <input type="text" id="nom" name="nom" placeholder="Your Full Name" >
         </div>
         <div class="form__grp">
             <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="Your Email Address" required>
+            <input type="email" id="email" name="email" placeholder="Your Email Address" >
         </div>
         <div class="form__grp">
             <label for="mot_de_passe">Your Password</label>
-            <input id="mot_de_passe" type="password" name="mot_de_passe" placeholder="Your Password" required>
+            <input id="mot_de_passe" type="password" name="mot_de_passe" placeholder="Your Password" >
         </div>
         <div class="form__grp">
             <label for="confirm_password">Confirm Password</label>
-            <input id="confirm_password" type="password" placeholder="Confirm Password" required>
+            <input id="confirm_password" type="password" placeholder="Confirm Password" >
         </div>
         <div class="form-check form__check d-flex align-items-center">
-            <input class="form-check-input" type="checkbox" id="agree" required>
-            <label class="form-check-label" for="agree">
-                I agree with <a href="#0">user agreement</a> and confirm that I am at least 18 years old!
-            </label>
-        </div>
+    <input class="form-check-input" type="checkbox" id="agree" required>
+    <label class="form-check-label" for="agree">
+        I agree with <a href="user_agreement.php" >user agreement</a> and confirm that I am at least 18 years old!
+    </label>
+</div>
+
         <div class="create__btn">
             <button type="submit" class="cmn--btn">
                 <span>Create an account</span>
@@ -686,24 +670,147 @@ if (
  <script src="assets/js/main.js"></script>
  <script src="assets/js/validation.js"></script>
  <script src="assets/js/login.js"></script>
+ 
  <script>
-   function setRole(role) {
-    document.getElementById('role').value = role;
+    function setRole(role) {
+        document.getElementById('role').value = role;
 
-    // Activer visuellement le bouton correspondant
-    document.getElementById('student-tab').classList.remove('active');
-    document.getElementById('prof-tab').classList.remove('active');
-    if (role === 'student') {
-       document.getElementById('student-tab').classList.add('active');
-    } else {
-       document.getElementById('prof-tab').classList.add('active');
+        // Activer visuellement le bouton correspondant
+        document.getElementById('student-tab').classList.remove('active');
+        document.getElementById('prof-tab').classList.remove('active');
+        if (role === 'student') {
+            document.getElementById('student-tab').classList.add('active');
+        } else {
+            document.getElementById('prof-tab').classList.add('active');
+        }
     }
- }
 
-   // Initialiser avec "student" par défaut
-   setRole('student');
- </script>
+    // Initialiser avec "student" par défaut
+    setRole('student');
 
+    function validateLoginForm() {
+        var email = document.getElementById('emailg').value;
+        var password = document.getElementById('password-field7').value;
+
+        var isValid = true;
+        document.getElementById('email_error').innerText = '';
+        document.getElementById('password_error').innerText = '';
+        document.getElementById('general_error').innerText = '';
+
+        if (!email) {
+            document.getElementById('email_error').innerText = 'Email is required.';
+            isValid = false;
+        }
+
+        if (!password) {
+            document.getElementById('password_error').innerText = 'Password is required.';
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    // Fonction pour gérer le clic sur le bouton de connexion
+function handleLogin() {
+    // Validation basique (optionnelle)
+    const email = document.getElementById("emailg").value.trim();
+    const password = document.getElementById("password-field7").value.trim();
+
+    if (email === "" || password === "") {
+        alert("Please fill in both email and password.");
+        return;
+    }
+    userRole =document.getElementById("role").value;
+    // Redirection en fonction du rôle
+    if (userRole === "student") {
+        window.location.href = "home.html";
+    } else if (userRole === "prof") {
+        window.location.href = "../back/tables.php";
+    } else {
+        alert("Invalid role. Please select a valid tab.");
+    }
+}
+
+function submitLoginForm() {
+    // Récupérer les données du formulaire
+    const email = document.getElementById("emailg").value.trim();
+    const password = document.getElementById("password-field7").value.trim();
+
+    // Réinitialiser les messages d'erreur
+    document.getElementById("email_error").innerText = "";
+    document.getElementById("password_error").innerText = "";
+
+    // Envoyer les données via AJAX
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "login_handler.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+
+            if (response.success) {
+                // Redirection en fonction du rôle
+                window.location.href = response.redirect; // Redirection automatique
+            } else {
+                // Afficher les erreurs séparées
+                if (response.errors.email) {
+                    document.getElementById("email_error").innerText = response.errors.email;
+                }
+                if (response.errors.password) {
+                    document.getElementById("password_error").innerText = response.errors.password;
+                }
+            }
+        }
+    };
+
+    // Envoyer les données
+    xhr.send(`email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
+}
+
+
+document.getElementById('email').addEventListener('input', function () {
+    const email = this.value.trim();
+    const feedback = document.getElementById('email_feedback');
+    const submitButton = document.querySelector('button[type="submit"]');
+
+    // Réinitialiser le message d'erreur
+    feedback.textContent = "";
+    feedback.style.color = "";
+
+    // Désactiver le bouton pendant la vérification
+    submitButton.disabled = true;
+
+    if (email !== "") {
+        // Envoyer une requête AJAX
+        fetch('check_email.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `email=${encodeURIComponent(email)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                feedback.textContent = "Cet email est déjà utilisé.";
+                feedback.style.color = "red";
+                submitButton.disabled = true; // Désactiver le bouton si l'email existe
+            } else {
+                submitButton.disabled = false; // Réactiver le bouton si l'email est disponible
+            }
+        })
+        .catch(err => {
+            console.error('Erreur lors de la vérification de l\'email', err);
+            feedback.textContent = "Erreur lors de la vérification.";
+            feedback.style.color = "red";
+            submitButton.disabled = true;
+        });
+    } else {
+        submitButton.disabled = false; // Réactiver le bouton si aucun email n'est saisi
+    }
+});
+</script>
 
 </body>
 </html>
