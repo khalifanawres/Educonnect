@@ -1,5 +1,5 @@
 <?php
-include(__DIR__ . '/config.php');
+include(__DIR__ . '/../config.php');
 include(__DIR__ . '/../Model/Participation.php');
 
 class ParticipationController
@@ -32,7 +32,7 @@ class ParticipationController
 
     function addParticipation($participation)
     {
-        $sql = "INSERT INTO participation (user_id, competition_id, date_participation) 
+        $sql = "INSERT INTO participations (user_id, competition_id, date_participation) 
                 VALUES (:user_id, :competition_id, :date_participation)";
         $db = config::getConnexion();
         try {
@@ -47,20 +47,19 @@ class ParticipationController
         }
     }
 
-    function deleteParticipation($user_id, $competition_id)
+    public function deleteParticipation($id)
     {
-        $sql = "DELETE FROM participation WHERE user_id = :user_id AND competition_id = :competition_id";
+        $sql = "DELETE FROM participations WHERE id = :id";
         $db = config::getConnexion();
-        $req = $db->prepare($sql);
-        $req->bindValue(':user_id', $user_id);
-        $req->bindValue(':competition_id', $competition_id);
-
+    
         try {
-            $req->execute();
+            $query = $db->prepare($sql);
+            $query->execute(['id' => $id]);
         } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
+            throw new Exception('Erreur lors de la suppression : ' . $e->getMessage());
         }
     }
+    
 
     function getParticipation($user_id, $competition_id)
     {
@@ -77,4 +76,51 @@ class ParticipationController
             die('Error: ' . $e->getMessage());
         }
     }
+    function getAllParticipations()
+    {
+        $sql = "SELECT p.id, p.date_participation, u.nom AS username, c.nom AS competition_name 
+                FROM participations p
+                JOIN user u ON p.user_id = u.id
+                JOIN competitions c ON p.competition_id = c.id";
+        $db = config::getConnexion();
+        try {
+            return $db->query($sql)->fetchAll();
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage();
+            return [];
+        }
+    }
+    public function getParticipationById($id)
+{
+    $sql = "SELECT * FROM participations WHERE id = :id";
+    $db = config::getConnexion();
+
+    try {
+        $query = $db->prepare($sql);
+        $query->execute(['id' => $id]);
+        return $query->fetch();
+    } catch (Exception $e) {
+        throw new Exception('Erreur : ' . $e->getMessage());
+    }
+}
+public function updateParticipation($id, $user_id, $competition_id, $date_participation)
+{
+    $sql = "UPDATE participations 
+            SET user_id = :user_id, competition_id = :competition_id, date_participation = :date_participation 
+            WHERE id = :id";
+    $db = config::getConnexion();
+
+    try {
+        $query = $db->prepare($sql);
+        $query->execute([
+            'id' => $id,
+            'user_id' => $user_id,
+            'competition_id' => $competition_id,
+            'date_participation' => $date_participation
+        ]);
+    } catch (Exception $e) {
+        throw new Exception('Erreur lors de la mise à jour : ' . $e->getMessage());
+    }
+}
+
 }

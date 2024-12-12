@@ -96,11 +96,11 @@ $competitions =  $compController->listCompetitions();
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="../pages/rtl.html">
+          <a class="nav-link " href="../Participation/List_Participation.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-world-2 text-dark text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">RTL</span>
+            <span class="nav-link-text ms-1">participation</span>
           </a>
         </li>
         <li class="nav-item mt-3">
@@ -275,7 +275,20 @@ $competitions =  $compController->listCompetitions();
                Consultez et gérez les compétitions en toute simplicité.
             </p>
          </div>
-           <div class="row justify-content-center align-items-center">
+
+         <!-- Formulaire de recherche -->
+         <div class="row justify-content-center mb-4">
+            <div class="col-lg-8">
+                <form method="GET" class="search-form">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" placeholder="Rechercher une compétition" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                        <button class="cmn--btn" type="submit">Rechercher</button>
+                    </div>
+                </form>
+            </div>
+         </div>
+
+         <div class="row justify-content-center align-items-center">
             <div class="col-lg-12">
               <div class="competitions__card__wrap">
                   <table class="competitions-table">
@@ -290,18 +303,23 @@ $competitions =  $compController->listCompetitions();
                       </thead>
                       <tbody>
                           <?php
+                          // Ajoutez ici la logique pour gérer la recherche
+                          $search = isset($_GET['search']) ? $_GET['search'] : '';
+
                           if ($competitions) {
                               foreach ($competitions as $competition) {
-                                  echo "<tr>";
-                                  echo "<td>" . htmlspecialchars($competition['nom']) . "</td>";
-                                  echo "<td>" . htmlspecialchars($competition['description']) . "</td>";
-                                  echo "<td>" . htmlspecialchars($competition['duree']) . " jours</td>";
-                                  echo "<td>" . htmlspecialchars($competition['contenu']) . "</td>";
-                                  echo "<td>
-                                          <a href='update_competition.php?id=" . $competition['id'] . "' class='cmn--btn'>Modifier</a>
-                                          <a href='delete_competition.php?id=" . $competition['id'] . "' class='cmn--btn' onclick='return confirm(\"Êtes-vous sûr de vouloir supprimer cette compétition ?\");'>Supprimer</a>
-                                        </td>";
-                                  echo "</tr>";
+                                  if (empty($search) || stripos($competition['nom'], $search) !== false) {
+                                      echo "<tr>";
+                                      echo "<td>" . htmlspecialchars($competition['nom']) . "</td>";
+                                      echo "<td>" . htmlspecialchars($competition['description']) . "</td>";
+                                      echo "<td>" . htmlspecialchars($competition['duree']) . " jours</td>";
+                                      echo "<td>" . htmlspecialchars($competition['contenu']) . "</td>";
+                                      echo "<td>
+                                              <a href='update_competition.php?id=" . $competition['id'] . "' class='cmn--btn'>Modifier</a>
+                                              <a href='delete_competition.php?id=" . $competition['id'] . "' class='cmn--btn' onclick='return confirm(\"Êtes-vous sûr de vouloir supprimer cette compétition ?\");'>Supprimer</a>
+                                            </td>";
+                                      echo "</tr>";
+                                  }
                               }
                           } else {
                               echo "<tr><td colspan='5'>Aucune compétition trouvée.</td></tr>";
@@ -311,14 +329,15 @@ $competitions =  $compController->listCompetitions();
                   </table>
               </div>
            </div>
-            <div class="col-lg-12 text-center">
-                  <a href="../../../../Educonnect/view/FrontOffice/Competitions/add_competition_form.php" class="cmn--btn"><span>Ajouter une nouvelle compétition</span></a>
+           <div class="col-lg-12 text-center">
+                  <a href="../pages/add_competition_back.php" class="cmn--btn"><span>Ajouter une nouvelle compétition</span></a>
             </div>
-           </div>
+         </div>
        </div>
    </div>
 </div>
-<!--Competitions End--> 
+<!--Competitions End-->
+
     
       <footer class="footer pt-3  ">
         <div class="container-fluid">

@@ -1,5 +1,5 @@
 <?php
-
+if (!class_exists('Participation')) {
 class Participation
 {
     private $id;
@@ -53,4 +53,5 @@ class Participation
     {
         $this->date_participation = $date_participation;
     }
+}
 }

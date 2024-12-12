@@ -1,0 +1,49 @@
+.update-participation__section {
+    padding-top: 80px;
+    background-color: var(--section-bg-two);
+}
+
+.update-participation__form__wrap {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.update-participation-form .form-group {
+    margin-bottom: 15px;
+}
+
+.update-participation-form label {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--black-color);
+}
+
+.update-participation-form input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-buttons {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.cmn--btn.btn-save {
+    background-color: var(--theme-color);
+    color: var(--white-color);
+}
+
+.cmn--btn.btn-cancel {
+    background-color: #f5f5f5;
+    color: var(--black-color);
+    margin-left: 10px;
+}
+
+.cmn--btn:hover {
+    opacity: 0.9;
+}

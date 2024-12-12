@@ -187,24 +187,28 @@ $competitions =  $compController->listCompetitions();
                           </tr>
                       </thead>
                       <tbody>
-                          <?php
-                          if ($competitions) {
-                              foreach ($competitions as $competition) {
-                                  echo "<tr>";
-                                  echo "<td><img src='/Educonnect/user.png' alt='Image par défaut' style='width: 50px; height: 50px;'></td>";
-                                  echo "<td>" . htmlspecialchars($competition['nom']) . "</td>";
-                                  echo "<td>" . htmlspecialchars($competition['description']) . "</td>";
-                                  echo "<td>" . htmlspecialchars($competition['duree']) . " jours</td>";
-                                  echo "<td>" . htmlspecialchars($competition['contenu']) . "</td>";
-                                  echo "<td>
-                                          <a href='update_competition_form.php?id=" . $competition['id'] . "' class='cmn--btn'>Details</a>
-                                        </td>";
-                                  echo "</tr>";
-                              }
-                          } else {
-                              echo "<tr><td colspan='5'>Aucune compétition trouvée.</td></tr>";
-                          }
-                          ?>
+                      <?php
+if ($competitions) {
+    foreach ($competitions as $competition) {
+        echo "<tr>";
+        echo "<td><img src='/Educonnect/user.png' alt='Image par défaut' style='width: 50px; height: 50px;'></td>";
+        echo "<td>" . htmlspecialchars($competition['nom']) . "</td>";
+        echo "<td>" . htmlspecialchars($competition['description']) . "</td>";
+        echo "<td>" . htmlspecialchars($competition['duree']) . " jours</td>";
+        echo "<td>" . htmlspecialchars($competition['contenu']) . "</td>";
+        // Correcte la ligne avec l'attribut href et l'onclick
+        echo "<td><a href='../../BackOffice/Participation/add_participation.php?id_competition=" . $competition['id'] . "' 
+                     class='cmn--btn' 
+                     onclick='return confirm(\"Êtes-vous sûr de vouloir participer à cette compétition ?\");'>
+                     Participer
+              </a></td>";
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='5'>Aucune compétition trouvée.</td></tr>";
+}
+?>
+
                       </tbody>
                   </table>
               </div>

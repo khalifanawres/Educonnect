@@ -1,0 +1,46 @@
+/* Section Styling */
+.participations__section {
+    padding-top: 80px;
+    background-color: var(--section-bg-two); /* Background Color */
+}
+
+.participations__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.participations__card__wrap {
+    margin-top: 30px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styling */
+.participations-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.participations-table th, .participations-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.participations-table th {
+    background-color: var(--section-bg); /* Dark background for header */
+    color: var(--white-color);
+    font-size: 16px;
+}
+
+.participations-table td {
+    font-size: 14px;
+    color: var(--black-color);
+}
+
+.participations-table tr:hover {
+    background-color: #f1f1f1;
+}
