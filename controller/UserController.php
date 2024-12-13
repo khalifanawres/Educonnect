@@ -92,7 +92,7 @@ class UserController
         ]);
 
         // Envoyer un email de confirmation (si nécessaire)
-        $this->sendConfirmationEmail($email, $user->getNom());
+        //$this->sendVerificationEmail($email, $user->getNom());
 
         // Retourner un succès
         return [
@@ -109,39 +109,42 @@ class UserController
 }
 
 
-    // Fonction pour envoyer l'email de confirmation
-    function sendConfirmationEmail($email, $name)
-    {
-        $mail = new PHPMailer(true);
+private $pdo;
+
+    public function __construct() {
+        $this->pdo = Config::getConnexion(); // Get the PDO connection
+    }
+
+    public function updateVerificationToken($email, $token) {
+        if ($this->pdo === null) {
+            $this->pdo = Config::getConnexion(); // Retry if the connection was lost
+        }
 
         try {
-            // Configurer le serveur SMTP
-            $mail->isSMTP();
-            $mail->Host = 'smtp.Outlook.com'; // Remplacez par votre serveur SMTP
-            $mail->SMTPAuth = true;
-            $mail->Username = 'abdelhamid.ayadi@esprit.tn'; // Remplacez par votre email SMTP
-            $mail->Password = '231JMT5991'; // Remplacez par votre mot de passe SMTP
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
-
-            // Configurer l'email
-            $mail->setFrom('abdelhamid.ayadi@esprit.tn', 'EDUCONNECT');
-            $mail->addAddress($email, $name);
-
-            $mail->isHTML(true);
-            $mail->Subject = 'Confirm your registration';
-            $mail->Body = "
-                <p>Hello <b>$name</b>,</p>
-                <p>Thank you for registering on our platform. Please confirm your email address by clicking the link below:</p>
-                <p><a href='http://yourwebsite.com/confirm.php?email=$email'>Confirm my email</a></p>
-                <p>Best regards,<br>YourApp Team</p>
-            ";
-
-            $mail->send();
-        } catch (Exception $e) {
-            echo "Email could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            $sql = "UPDATE user SET verification_token = :token, is_verified = 0 WHERE email = :email";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute(['token' => $token, 'email' => $email]);
+        } catch (PDOException $e) {
+            // Handle the error
+            die('Query failed: ' . $e->getMessage());
         }
     }
+
+
+public function verifyEmail($token) {
+    $sql = "SELECT * FROM users WHERE verification_token = :token AND is_verified = 0";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute(['token' => $token]);
+    $user = $stmt->fetch();
+
+    if ($user) {
+        $sql = "UPDATE users SET is_verified = 1, verification_token = NULL WHERE email = :email";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['email' => $user['email']]);
+        return true;
+    }
+    return false;
+}
 
 
     
@@ -336,36 +339,6 @@ public function doesEmailExist($email) {
     }
 }
 
-
-public function saveVerificationCode($email, $code) {
-    $conn = config::getConnexion();
-    
-    try {
-        $sql = "UPDATE user SET verification_code = ? WHERE email = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([$code, $email]);
-    } catch (PDOException $e) {
-        error_log("Erreur lors de la sauvegarde du code de vérification : " . $e->getMessage());
-    }
-}
-
-public function storeResetToken($userId, $token) {
-    $conn = config::getConnexion();
-
-    $sql = "UPDATE user SET reset_token = ? WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$token, $userId]);
-}
-
-public function getUserByToken($token) {
-    $conn = config::getConnexion();
-
-    $sql = "SELECT * FROM user WHERE reset_token = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$token]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
-
 public function clearResetToken($userId) {
     $conn = config::getConnexion();
 
@@ -388,5 +361,124 @@ public function validateCurrentPassword($userId, $currentPassword) {
     }
 }
 
+
+public function checkEmailExists($email)
+{
+    $db = config::getConnexion();
+    $sql = "SELECT COUNT(*) FROM user WHERE email = :email";
+    $query = $db->prepare($sql);
+    $query->execute(['email' => $email]);
+    return $query->fetchColumn() > 0;
+}
+
+public function storeResetToken($email, $token, $expiry)
+{
+    $db = config::getConnexion();
+    $sql = "UPDATE user SET reset_token = :token, token_expiry = :expiry WHERE email = :email";
+    $query = $db->prepare($sql);
+    $query->execute([
+        'token' => $token,
+        'expiry' => $expiry,
+        'email' => $email
+    ]);
+}
+
+public function getUserByToken($token) {
+    $db = config::getConnexion();
+    $query = $db->prepare("SELECT * FROM user WHERE reset_token = :token AND token_expiry > NOW()");
+    $query->execute(['token' => $token]);
+    return $query->fetch();
+}
+
+public function updatePassword($token, $new_password)
+{
+    $db = config::getConnexion();
+    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+    $sql = "UPDATE user SET mot_de_passe = :password, reset_token = NULL, token_expiry = NULL WHERE reset_token = :token";
+    $query = $db->prepare($sql);
+    $query->execute(['password' => $hashed_password, 'token' => $token]);
+}
+
+public function verifyToken($token)
+{
+    $db = config::getConnexion();
+    $sql = "SELECT COUNT(*) FROM user WHERE reset_token = :token AND token_expiry > NOW()";
+    $query = $db->prepare($sql);
+    $query->execute(['token' => $token]);
+    return $query->fetchColumn() > 0;
+}
+
+public function sendVerificationEmail($email, $verificationCode)
+{
+    
+    $mail = new PHPMailer(true);
+    try {
+        // Configurer le serveur SMTP
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com'; // Remplacez par votre hôte SMTP
+        $mail->SMTPAuth = true;
+        $mail->Username = 'spouz2003@gmail.com'; // Remplacez par votre email
+        $mail->Password = 'fdbx olhy sjgg wdwr'; // Remplacez par votre mot de passe
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        // Configurer les destinataires
+        $mail->setFrom('your_email@example.com', 'Your Website');
+        $mail->addAddress($email);
+
+        // Contenu de l'e-mail
+        $mail->isHTML(true);
+        $mail->Subject = 'Verify Your Email Address';
+        $mail->Body = "Please click the link below to verify your email address:<br>
+        <a href='http://localhost/projet/view/front_/verify_email.php?code=$verificationCode'>Verify Email</a>";
+
+        $mail->send();
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+}
+
+public function saveVerificationCode($email, $verificationCode)
+{
+    $db = config::getConnexion();
+    $sql = "UPDATE user SET verification_code = :code WHERE email = :email";
+    $query = $db->prepare($sql);
+    $query->execute([
+        'code' => $verificationCode,
+        'email' => $email
+    ]);
+}
+
+public function verifyGoogleSignIn($idToken) {
+        // Exécuter une requête pour vérifier le token ID via l'API Google
+        $client = new Google_Client();
+        $client->setClientId('683896753133-irr48t3kldu1on8hiurrl2ork2kij2r3.apps.googleusercontent.com');
+        $client->setClientSecret('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');
+        $payload = $client->verifyIdToken($idToken);
+
+        if ($payload) {
+            // Utilisateur validé avec succès via Google
+            $email = $payload['email'];
+            // Rechercher l'utilisateur par email
+            $user = $this->findUserByEmail($email);
+
+            if ($user) {
+                // Utilisateur déjà enregistré
+                return $user;
+            } else {
+                // Nouvel utilisateur
+                return ['status' => 'new_user'];
+            }
+        }
+
+        return false;
+    }
+
+    private function findUserByEmail($email) {
+        // Exemple de requête pour rechercher l'utilisateur par email
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
 }

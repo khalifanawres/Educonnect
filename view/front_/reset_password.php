@@ -1,36 +1,41 @@
 <?php
-include '../../controller/UserController.php';
+require_once '../../controller/UserController.php';
 
-if (isset($_GET['token'])) {
+$error = '';
+$success = '';
+
+if (isset($_GET['token']) && $_SERVER["REQUEST_METHOD"] == "POST") {
     $token = $_GET['token'];
+    $new_password = $_POST['new_password'];
     $userController = new UserController();
 
-    // Vérifier si le token est valide
-    $user = $userController->getUserByToken($token);
-
-    if ($user) {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $newPassword = $_POST['new_password'];
-            $repeatPassword = $_POST['repeat_password'];
-
-            if ($newPassword === $repeatPassword) {
-                $userController->updateUserPassword($user['id'], null, $newPassword);
-                $userController->clearResetToken($user['id']); // Supprimer le token
-                echo "Votre mot de passe a été réinitialisé avec succès.";
-            } else {
-                echo "Les mots de passe ne correspondent pas.";
-            }
-        }
+    if ($userController->verifyToken($token)) {
+        $userController->updatePassword($token, $new_password);
+        echo '<script>alert("Password has been reset successfully!"); window.location.href = "login.php";</script>';
     } else {
-        echo "Lien invalide ou expiré.";
+        echo '<script>alert("Invalid or expired token.");</script>';
     }
 }
 ?>
-
-<form method="POST">
-    <label for="new_password">Nouveau mot de passe :</label>
-    <input type="password" id="new_password" name="new_password" required>
-    <label for="repeat_password">Répéter le mot de passe :</label>
-    <input type="password" id="repeat_password" name="repeat_password" required>
-    <button type="submit">Réinitialiser le mot de passe</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+</head>
+<body>
+    <form action="" method="POST">
+        <h2>Reset Password</h2>
+        <?php if ($error): ?>
+            <p style="color: red;"><?= $error ?></p>
+        <?php endif; ?>
+        <?php if ($success): ?>
+            <p style="color: green;"><?= $success ?></p>
+        <?php endif; ?>
+        <label for="new_password">New Password:</label>
+        <input type="password" name="new_password" id="new_password" >
+        <button type="submit">Reset Password</button>
+    </form>
+</body>
+</html>

@@ -8,8 +8,10 @@ class User {
     private $dob;
     private $tel;
     private $photo;
+    public $verification_token;
+    public $verified;
 
-    public function __construct($id, $nom, $email, $mot_de_passe, $role, $dob = null, $tel = null, $photo = null) {
+    public function __construct($id, $nom, $email, $mot_de_passe, $role, $dob = null, $tel = null, $photo = null , $verification_token = null, $verified = false) {
         $this->id = $id;
         $this->nom = $nom;
         $this->email = $email;
@@ -18,6 +20,8 @@ class User {
         $this->dob = $dob;
         $this->tel = $tel;
         $this->photo = $photo;
+        $this->verification_token = $verification_token;
+        $this->verified = $verified;
     }
 
     // Getters et Setters pour chaque propriété

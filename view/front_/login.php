@@ -1,29 +1,109 @@
 <?php
 include '../../controller/UserController.php';
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 $error = "";
 
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-   $userController = new UserController();
+    $secretKey = "6Lcq-ZkqAAAAACFuEKYvZ-Io0PWJQC6M9oEmDr-7";
+    $response = $_POST['g-recaptcha-response'];
+    $remoteIp = $_SERVER['REMOTE_ADDR'];
 
-   $user = new User(
-       null,
-       $_POST['nom'],
-       $_POST['email'],
-       $_POST['mot_de_passe'],
-       $_POST['role']
-   );
+    $url = "https://www.google.com/recaptcha/api/siteverify";
+    $data = [
+        'secret' => $secretKey,
+        'response' => $response,
+        'remoteip' => $remoteIp
+    ];
 
-   $result = $userController->addUser($user);
+    $options = [
+        'http' => [
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method' => 'POST',
+            'content' => http_build_query($data),
+        ],
+    ];
 
-   if ($result['status'] === 'success') {
-       echo json_encode(['status' => 'success', 'message' => $result['message']]);
-   } else {
-       echo json_encode(['status' => 'error', 'message' => $result['message']]);
-   }
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    $json = json_decode($result);
+
+    if ($json->success) {
+        $userController = new UserController();
+
+        $user = new User(
+            null,
+            $_POST['nom'],
+            $_POST['email'],
+            $_POST['mot_de_passe'],
+            $_POST['role']
+        );
+
+        $result = $userController->addUser($user);
+
+        if ($result['status'] === 'success') {
+            // Générer un token de vérification
+            $verificationToken = bin2hex(random_bytes(16));
+            $userController->updateVerificationToken($user->getEmail(), $verificationToken);
+
+            // Envoyer l'email de vérification
+            $mail = new PHPMailer(true);
+
+            try {
+                // Configuration du serveur SMTP
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com'; // Remplacez par votre serveur SMTP
+                $mail->SMTPAuth = true;
+                $mail->Username = 'spouz2003@gmail.com'; // Remplacez par votre email
+                $mail->Password = 'fdbx olhy sjgg wdwr'; // Remplacez par votre mot de passe
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
+
+                // Destinataire
+                $mail->setFrom('your_email@example.com', 'Your Name');
+                $mail->addAddress($user->getEmail(), $user->getNom());
+
+                // Contenu de l'email
+                $mail->isHTML(true);
+                $mail->Subject = 'Email Verification';
+                $mail->Body    = 'Please click the following link to verify your email: <a href="https://yourdomain.com/verify.php?token=' . $verificationToken . '">Verify Email</a>';
+                $mail->AltBody = 'Please click the following link to verify your email: https://yourdomain.com/verify.php?token=' . $verificationToken;
+
+                $mail->send();
+                echo json_encode(['status' => 'success', 'message' => 'Registration successful. Please check your email to verify your account.']);
+            } catch (Exception $e) {
+                echo json_encode(['status' => 'error', 'message' => 'Email could not be sent. Mailer Error: ' . $mail->ErrorInfo]);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => $result['message']]);
+        }
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'CAPTCHA failed.']);
+    }
+}
+$UserController = new UserController();
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+   if (!empty($_POST["nom"]) && !empty($_POST["email"]) && !empty($_POST["mot_de_passe"]) && isset($_POST["role"])) {
+       $user = new User(null, $_POST['nom'], $_POST['email'], $_POST['mot_de_passe'], $_POST['role']);
+       $UserController->addUser($user);
+
+       // Générer un code de vérification
+       $verificationCode = bin2hex(random_bytes(16)); 
+       $UserController->saveVerificationCode($_POST['email'], $verificationCode);
+
+       // Envoyer l'e-mail de vérification
+       $UserController->sendVerificationEmail($_POST['email'], $verificationCode);
+
+       echo '<script>alert("A verification email has been sent to your address. Please verify to complete registration.");</script>';
+      } else {
+         echo '<script>alert("Please fill in all fields.");</script>';
+      }
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -32,6 +112,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDUCONNECT</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <meta name="google-signin-client_id" content="683896753133-t1u8r32o6tep42a6pkujund3j1ramn5i.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
 
     <!--Favicon img-->
    <link rel="shortcut icon" href="assets/img/favicon/favicon.png">
@@ -55,11 +142,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
    <!--main css-->
    <link rel="stylesheet" href="assets/css/main.css">
    <link rel="stylesheet" href="assets/css/style-login.css">
-
+   
+   <script>
+        function translatePage() {
+            // Traduction des éléments par id ou par classe
+            $('#banner h4').text('À propos');
+            $('#register label[for="nom"]').text("Nom Complet");
+            $('#register label[for="email"]').text("Adresse Email");
+            $('#register label[for="mot_de_passe"]').text("Votre Mot de Passe");
+            $('#register label[for="confirm_password"]').text("Confirmez le Mot de Passe");
+            $('#loginForm label[for="emailg"]').text("Adresse Email");
+            $('#loginForm label[for="password-field7"]').text("Votre Mot de Passe");
+            $('.forgot-password a').text("Mot de passe oublié ?");
+        }
+    </script>
+    
 
 </head>
-<body>
-
+<body id="body">
+<header>
+        <button id="toggle-dark-mode">Toggle Dark Mode</button>
+    </header>
   <!--==== Scrool Top Bottom Here ======= -->
 <div id="progress">
   <span id="valiu"><i class="fas fa-arrow-up"></i></span>
@@ -74,6 +177,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
      <span>Sign Up</span>
   </a>
 </div>
+
+<!-- Traduction Button -->
+
 
 
   
@@ -116,6 +222,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <div class="modal register__modal fade" id="register" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog  modal-md">
         <div class="modal-content">
+        <button onclick="translatePage()">Traduire en Français</button>
            <div class="modal-header">
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
            </div>
@@ -136,7 +243,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                    <img src="assets/img/modal/flowers.png" alt="f-img">
                                 </div>
                                 <form action="" method="POST" onsubmit="return validateForm();">
-                                <div>
+        <div>
             <ul class="nav nav-tabs" id="myTabing" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button type="button" class="nav-link" id="student-tab" onclick="setRole('student')" data-bs-toggle="tab" role="tab" aria-controls="student" aria-selected="true">STUDENT</button>
@@ -147,38 +254,46 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </ul>
         </div>
         <input type="hidden" name="role" id="role" value="prof">
-    <div class="form__grp">
-        <label for="nom">Full Name</label>
-        <input type="text" id="nom" name="nom" placeholder="Your Full Name" oninput="validateFullName()" >
-        <span id="nom_feedback" class="feedback"></span>
-    </div>
-    <div class="form__grp">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" placeholder="Your Email Address" oninput="validateEmail()" >
-        <span id="email_feedback" class="feedback"></span>
-    </div>
-    <div class="form__grp">
+        <div class="form__grp">
+            <label for="nom">Full Name</label>
+            <input type="text" id="nom" name="nom" placeholder="Your Full Name" oninput="validateFullName()" >
+            <span id="nom_feedback" class="feedback"></span>
+        </div>
+        <div class="form__grp">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Your Email Address" oninput="validateEmail()" >
+            <span id="email_feedback" class="feedback"></span>
+        </div>
+        <div class="form__grp">
         <label for="mot_de_passe">Your Password</label>
-        <input id="mot_de_passe" type="password" name="mot_de_passe" placeholder="Your Password" oninput="validatePassword()" >
+        <div class="password-wrapper">
+            <input id="mot_de_passe" type="password" name="mot_de_passe" placeholder="Your Password" oninput="validatePassword()" >
+            <span class="toggle-password" onclick="togglePasswordVisibility('mot_de_passe')">&#128065;</span>
+        </div>
+        <button type="button" onclick="generateRandomPassword()">Generate Password</button>
         <span id="password_feedback" class="feedback"></span>
     </div>
     <div class="form__grp">
         <label for="confirm_password">Confirm Password</label>
-        <input id="confirm_password" type="password" placeholder="Confirm Password" oninput="validateConfirmPassword()" >
+        <div class="password-wrapper">
+            <input id="confirm_password" type="password" placeholder="Confirm Password" oninput="validateConfirmPassword()" >
+            <span class="toggle-password" onclick="togglePasswordVisibility('confirm_password')">&#128065;</span>
+        </div>
         <span id="confirm_password_feedback" class="feedback"></span>
     </div>
-    <div class="form-check form__check d-flex align-items-center">
-    <input class="form-check-input" type="checkbox" id="agree" required>
-    <label class="form-check-label" for="agree">
-        I agree with <a href="user_agreement.php" >user agreement</a> and confirm that I am at least 18 years old!
-    </label>
-</div>
-    <div class="create__btn">
-        <button type="submit" class="cmn--btn">
-            <span>Create an account</span>
-        </button>
-    </div>
-</form>
+        <div class="form-check form__check d-flex align-items-center">
+            <input class="form-check-input" type="checkbox" id="agree" required>
+            <label class="form-check-label" for="agree">
+                I agree with <a href="user_agreement.php" >user agreement</a> and confirm that I am at least 18 years old!
+            </label>
+        </div>
+        <div class="g-recaptcha" data-sitekey="6Lcq-ZkqAAAAAAA8FnVHscQT9niyxkhqn_eUSjEo"></div>
+        <div class="create__btn">
+            <button type="submit" class="cmn--btn">
+                <span>Create an account</span>
+            </button>
+        </div>
+    </form>
                                 <div class="social__head">
                                    <div class="border__static"></div>
                                    <span>
@@ -232,9 +347,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <!-- Champ mot de passe -->
     <div class="form__grp">
         <label for="password-field7">Your Password</label>
-        <input id="password-field7" type="password" name="password" placeholder="Your Password" >
+        <div class="password-wrapper">
+            <input id="password-field7" type="password" name="password" placeholder="Your Password" >
+            <span class="toggle-password" onclick="togglePasswordVisibility('password-field7')">&#128065;</span>
+        </div>
         <span id="password_error" class="feedback" style="color: red;"></span>
     </div>
+
+    
+    <div class="g-recaptcha" data-sitekey="6Lcq-ZkqAAAAAAA8FnVHscQT9niyxkhqn_eUSjEo"></div>
+
+
+
 
     <div class="create__btn">
         <button type="button" class="cmn--btn" onclick="submitLoginForm();">
@@ -255,16 +379,57 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                       Or log in directly with
                                    </span>
                                    <ul class="social">
-                                      <li>
-                                            <a href="#0">
-                                               <i class="fa-brands fa-facebook-f"></i>
-                                            </a>
-                                      </li>
-                                      <li>
-                                            <a href="#0">
-                                               <i class="fab fa-google"></i>
-                                            </a>
-                                      </li>
+                                   <li>
+    <a href="javascript:void(0);" onclick="loginWithFacebook()">
+        <i class="fa-brands fa-facebook-f"></i>
+    </a>
+</li>
+
+<!-- Fenêtre modale pour le rôle -->
+<div id="roleModal" style="display: none;">
+    <div class="modal-content">
+        <h2>Choose Your Role</h2>
+        <p>Select your role to complete your registration:</p>
+        <button onclick="setUserRole('student')" class="role-button">Student</button>
+        <button onclick="setUserRole('prof')" class="role-button">Prof</button>
+    </div>
+</div>
+
+<style>
+    #roleModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+    }
+    .role-button {
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        background-color: #007BFF;
+        color: white;
+        font-size: 16px;
+    }
+</style>
+                                      
+<li>
+<a href="#0" onclick="googleSignIn()">
+        <i class="fab fa-google"></i>
+    </a>
+</li>
                                       <li>
                                             <a href="#0">
                                                <i class="fab fa-twitter"></i>
@@ -482,6 +647,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </div>
 <!--Login Modal End-->
 
+
+
 <!--Footer Here-->
 <footer id="footer" class="footer-section section-bg pt-120">
   <div class="container">
@@ -670,23 +837,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
  <script src="assets/js/main.js"></script>
  <script src="assets/js/validation.js"></script>
  <script src="assets/js/login.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
  
  <script>
-    function setRole(role) {
-        document.getElementById('role').value = role;
-
-        // Activer visuellement le bouton correspondant
-        document.getElementById('student-tab').classList.remove('active');
-        document.getElementById('prof-tab').classList.remove('active');
-        if (role === 'student') {
-            document.getElementById('student-tab').classList.add('active');
-        } else {
-            document.getElementById('prof-tab').classList.add('active');
-        }
-    }
-
-    // Initialiser avec "student" par défaut
-    setRole('student');
+    
 
     function validateLoginForm() {
         var email = document.getElementById('emailg').value;
@@ -751,7 +905,7 @@ function submitLoginForm() {
 
             if (response.success) {
                 // Redirection en fonction du rôle
-                window.location.href = response.redirect; // Redirection automatique
+                window.location.href = response.redirect;
             } else {
                 // Afficher les erreurs séparées
                 if (response.errors.email) {
@@ -760,6 +914,11 @@ function submitLoginForm() {
                 if (response.errors.password) {
                     document.getElementById("password_error").innerText = response.errors.password;
                 }
+
+                // Afficher une alerte si la seconde vérification échoue
+                if (response.alert) {
+                    alert(response.alert);
+                }
             }
         }
     };
@@ -767,6 +926,8 @@ function submitLoginForm() {
     // Envoyer les données
     xhr.send(`email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
 }
+
+
 
 
 document.getElementById('email').addEventListener('input', function () {
@@ -811,6 +972,262 @@ document.getElementById('email').addEventListener('input', function () {
     }
 });
 </script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '580053194977914', // Remplacez par votre App ID
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v21.0' // Assurez-vous d'utiliser la version correcte
+    });
+    FB.AppEvents.logPageView();
+  };
+</script>
+<script>
+   function loginWithFacebook() {
+    FB.login(function(response) {
+        if (response.status === 'connected') {
+            FB.api('/me', { fields: 'id,name,email' }, function(userInfo) {
+                // Envoyer les informations à votre backend
+                fetch('facebook_login_handler.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: userInfo.id,
+                        name: userInfo.name,
+                        email: userInfo.email,
+                        accessToken: response.authResponse.accessToken
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'new_user') {
+                        // Afficher la fenêtre modale pour le choix du rôle
+                        document.getElementById('roleModal').style.display = 'flex';
+                    } else if (data.status === 'success') {
+                        if (data.role === 'prof') {
+                            window.location.href = '../back/tables.php';
+                        } else {
+                            window.location.href = 'home.html';
+                        }
+                    } else {
+                        alert(data.message);
+                    }
+                });
+            });
+        } else {
+            alert('Facebook login failed!');
+        }
+    }, { scope: 'public_profile,email' });
+}
 
+
+
+function setUserRole(role) {
+    fetch('set_user_role.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role: role })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Fermer la modale et rediriger
+            document.getElementById('roleModal').style.display = 'none';
+            if (role === 'prof') {
+                window.location.href = '../back/tables.php';
+            } else {
+                window.location.href = 'home.html';
+            }
+        } else {
+            alert(data.message);
+        }
+    });
+}
+
+
+
+
+// Fonction pour définir le rôle après choix dans le modal
+function setRoleAndLogin(role) {
+    fetch('facebook_login_handler.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            role: role
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            if (data.role === 'prof') {
+                window.location.href = '../back/tables.php';
+            } else {
+                window.location.href = 'home.html';
+            }
+        } else {
+            alert(data.message);
+        }
+    });
+}
+</script>
+<script>
+    function initGoogleSignIn() {
+            window.onLoadCallback = function() {
+                gapi.load('auth2', function() {
+                    gapi.auth2.init({
+                        client_id: '683896753133-t1u8r32o6tep42a6pkujund3j1ramn5i.apps.googleusercontent.com',
+                    }).then(function() {
+                        handleGoogleSignIn();
+                    });
+                });
+            };
+        }
+
+        function handleGoogleSignIn() {
+            gapi.auth2.getAuthInstance().signIn().then(function(googleUser) {
+                var id_token = googleUser.getAuthResponse().id_token;
+                fetch('google_callback.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id_token: id_token })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'new_user') {
+                        document.getElementById('roleModal').style.display = 'flex';
+                    } else if (data.status === 'existing_user') {
+                        if (data.role === 'prof') {
+                            window.location.href = '../back/tables.php';
+                        } else {
+                            window.location.href = 'home.html';
+                        }
+                    }
+                });
+            });
+        }
+
+</script>
+<script>
+   function googleInit() {
+    gapi.load('auth2', function() {
+      gapi.auth2.init({
+        client_id: '683896753133-irr48t3kldu1on8hiurrl2ork2kij2r3.apps.googleusercontent.com', // Remplacez par votre propre client ID
+        cookiepolicy: 'single_host_origin', // Pour sécuriser l'authentification cross-origin
+        redirect_uri: 'http://localhost/projet/view/front_/login.php' // Remplacez par votre URL de redirection correcte
+      });
+
+      window.googleSignIn = function() {
+        const authInstance = gapi.auth2.getAuthInstance();
+        authInstance.signIn().then(user => {
+          const idToken = user.getAuthResponse().id_token;
+
+          fetch('verify_google_sign_in.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idToken: idToken })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === 'new_user') {
+              document.getElementById('roleModal').style.display = 'block';
+            } else if (data.status === 'user_exists') {
+              if (data.role === 'prof') {
+                window.location.href = '../back/tables.php';
+              } else {
+                window.location.href = 'home.html';
+              }
+            }
+          })
+          .catch(error => {
+            console.error('Erreur lors de la connexion Google :', error);
+          });
+        });
+      };
+
+      document.getElementById('googleSignInBtn').addEventListener('click', googleSignIn);
+    });
+  }
+
+  // Initialisation de l'API Google Sign-In
+  googleInit();
+
+</script>
+<script>
+function translateContent() {
+      // Fonction pour traduire le contenu en français
+      document.querySelectorAll('h4, ul li a').forEach(element => {
+        if (element.textContent === 'About') {
+          element.textContent = 'À propos';
+        } else if (element.textContent === 'Home') {
+          element.textContent = 'Accueil';
+        }
+        // Ajoutez plus de traductions selon votre besoin
+      });
+    }
+  </script>
+  <script>
+    function generateRandomPassword() {
+        var password = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+        for (var i = 0; i < 12; i++) {
+            password += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        document.getElementById('mot_de_passe').value = password;
+        document.getElementById('confirm_password').value = password; // Réinitialise le champ de confirmation avec le même mot de passe
+    }
+    function togglePasswordVisibility(id) {
+        var passwordField = document.getElementById(id);
+        var passwordFieldType = passwordField.getAttribute('type');
+        var toggleIcon = passwordField.nextElementSibling;
+
+        if (passwordFieldType === 'password') {
+            passwordField.setAttribute('type', 'text');
+            toggleIcon.innerHTML = '&#128064;'; // change l'icône en œil barré
+        } else {
+            passwordField.setAttribute('type', 'password');
+            toggleIcon.innerHTML = '&#128065;'; // change l'icône en œil
+        }
+    }
+    // Toggle Dark Mode
+const toggleDarkModeButton = document.getElementById('toggle-dark-mode');
+const body = document.getElementById('body');
+
+toggleDarkModeButton.addEventListener('click', function() {
+    body.classList.toggle('dark-mode');
+});
+
+</script>
+<style>
+   /* Mode clair */
+body {
+    background-color: #fff;
+    color: #000;
+}
+
+.form__grp {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+/* Mode sombre */
+body.dark-mode {
+    background-color: #121212;
+    color: #fff;
+}
+
+body.dark-mode .form__grp {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+}
+
+.toggle-password {
+    cursor: pointer;
+}
+
+</style>
 </body>
 </html>

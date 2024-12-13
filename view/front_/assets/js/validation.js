@@ -69,6 +69,8 @@ function validateForm() {
     validateEmail();
     validatePassword();
     validateConfirmPassword();
+    var response = grecaptcha.getResponse();
+    const agreeCheckbox = document.getElementById('agree');
 
     // Vérifiez si tous les champs sont corrects avant d'envoyer
     const feedbacks = document.querySelectorAll(".feedback");
@@ -78,6 +80,17 @@ function validateForm() {
             return false;
         }
     }
+    
+    if (response.length === 0) {
+        alert("Please complete the CAPTCHA.");
+        return false;
+    }
+
+    if (!agreeCheckbox.checked) {
+        alert("You must agree to the terms and conditions.");
+        return false;
+    }
+    alert("Check your email to complete the registration process.");
 
     return true;
 }

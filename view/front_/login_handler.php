@@ -3,7 +3,8 @@ include '../../controller/UserController.php';
 
 $response = [
     'success' => false,
-    'errors' => []
+    'errors' => [],
+    'alert' => '' // Ajoutez un champ pour les alertes
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -27,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (!$user) {
             $response['errors']['password'] = 'Mot de passe incorrect.';
+        } elseif (!$user['is_verified']) { // Vérifiez si la seconde vérification a été effectuée
+            $response['alert'] = 'Veuillez vérifier votre compte avant de vous connecter.';
         } else {
             $response['success'] = true;
 
@@ -53,3 +56,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Renvoyer une réponse JSON
 header('Content-Type: application/json');
 echo json_encode($response);
+?>
