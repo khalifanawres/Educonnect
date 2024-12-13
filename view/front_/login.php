@@ -160,9 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </head>
 <body id="body">
-<header>
-        <button id="toggle-dark-mode">Toggle Dark Mode</button>
-    </header>
+
   <!--==== Scrool Top Bottom Here ======= -->
 <div id="progress">
   <span id="valiu"><i class="fas fa-arrow-up"></i></span>
@@ -1193,41 +1191,14 @@ function translateContent() {
         }
     }
     // Toggle Dark Mode
-const toggleDarkModeButton = document.getElementById('toggle-dark-mode');
+/*const toggleDarkModeButton = document.getElementById('toggle-dark-mode');
 const body = document.getElementById('body');
 
 toggleDarkModeButton.addEventListener('click', function() {
     body.classList.toggle('dark-mode');
-});
+});*/ 
 
 </script>
-<style>
-   /* Mode clair */
-body {
-    background-color: #fff;
-    color: #000;
-}
 
-.form__grp {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-}
-
-/* Mode sombre */
-body.dark-mode {
-    background-color: #121212;
-    color: #fff;
-}
-
-body.dark-mode .form__grp {
-    background-color: #1e1e1e;
-    border: 1px solid #333;
-}
-
-.toggle-password {
-    cursor: pointer;
-}
-
-</style>
 </body>
 </html>
