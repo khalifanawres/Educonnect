@@ -1,21 +1,21 @@
 <?php
-include_once(__DIR__ . '/..config.php');
-include_once(__DIR__ . '/../Model/Cours.php');
+include(__DIR__ . '/../config.php');
+include(__DIR__ . '/../Model/Cours.php');
 
 class CoursController{
 
     public function addCours(Cours $cours)
     {
         $sql = "INSERT INTO cours
-        VALUES (NULL, NULL, :titre, :types, :descript, NULL)";
+        VALUES (NULL, NULL, :title, :category, :descript, NULL)";
         $db =config::getConnexion();
         try {
             $query = $db->prepare($sql);
             $query->execute
             (
                 [
-                    'titre'=> $cours->getTitre(),
-                    'types'=> $cours->getType(),
+                    'title'=> $cours->gettitle(),
+                    'category'=> $cours->getType(),
                     'descript'=>$cours->getDescription(),
                 ]
                 );
@@ -28,7 +28,7 @@ class CoursController{
 
     public function listCours()
     {
-        $sql="SELECT * FROM Cours";
+        $sql="SELECT * FROM cours";
         $db =config::getConnexion();
         try{
             $liste = $db->query($sql);
@@ -39,14 +39,48 @@ class CoursController{
         }
     }
 
-    public function updateCours($cours,$id)
+    public function updateCours($cours,$idCours)
     {
-        $sql = "UPDATE cours SET
-            'idCours'=>$cours->idCours,
-            'idCreateur'=>$cours->idCreateur,
-            'titre'=>$cours->titre,
-            'types'=>$cours->type,
-            'descript'=>$cours->description"
+        var_dump($cours);
+        try { 
+            $db= config::getConnexion();
+            $query = $db->prepare(
+                'UPDATE cours SET
+                    title = :title,
+                    category = :category,
+                    descript = descript
+                    WHERE id = :idCours'
+            );
+
+            $query->execute([
+                
+                'title' => $title,
+                'category' => $category,
+                'descript' => $descript,
+            ]);
+
+            echo $query->rowCount() . "Records Updated succesfully <br>";
+        } catch (PDOException $e)
+        {
+            $e->getMessage();
+        }
     }
+      
+    function deleteCours($idCours)
+    {
+        $sql = "DELETE FROM cours WHERE id = :idCours";
+        $db = config::getConnexion();
+        $req = $dq->prepare($sql);
+        $req->bindValue(':id',$idCours);
+
+        try {
+            $req->execute();
+        } catch (Exception $e)
+        {
+            die ('Error:' . $e->getMessage());
+        }
+    }
+
 }
+
 ?>

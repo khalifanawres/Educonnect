@@ -5,11 +5,11 @@ class Chapitre {
     public $nom;
     public $contenu;
 
-    public function __construct($nom,$description,$description,$contenu,?int $id=null)
+    public function __construct($nom,$descript,$descript,$contenu,?int $id=null)
     {
         $this->id = $id;
         $this->nom = $nom;
-        $this->description = $description;
+        $this->descript = $descript;
         $this->contenu = $contenu;
     }
 

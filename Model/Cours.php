@@ -1,57 +1,82 @@
 <?php
 class Cours{
-    public ?int $idCours;
-    public ?int $idCreateur;
-    public ?string $titre;
-    public ?string $type;
-    public ?string $description;
-    public ?int $array = [];
+    public ?int $idCourse;
+    public ?int $idCreator;
+    public ?string $title;
+    public ?string $category;
+    public ?string $descript;
+    public ?DateTime $Creation_Date;
+    
 
-    public function __construct ($id=null,$idcr,$t,$tp,$desc,$)
+    public function __construct (?int $idCourse,?int $idCreator,?string $title,?string $category,?string $descript,?DateTime $Creation_Date)
     {
-        $this->idCours=$id;
-        $this->idCreateur=$idcr;
-        $this->titre=$t;
-        $this->type=$tp;
-        $this->description=$desc;
-        $this->
+        $this->idCourse=$idCourse;
+        $this->idCreator=$idCreator;
+        $this->title=$title;
+        $this->category=$category;
+        $this->descript=$descript;
+        $this->Creation_Date=$Creation_Date;
     }
 
-    public function getIdCreateur()
+    public function getidCreator(): ?int
     {
-        return $this->idCreateur;
+        return $this->idCreateor;
     }
 
-    public function getidCours()
+    public function getidCourse(): ?int
     {
-        return $this->idCours;
+        return $this->idCourse;
     }
 
-    public function getTitre()
+    public function getTitle(): ?string
     {
-        return $this->titre;
+        return $this->title;
     }
 
-    public function getType()
+    public function getCategory(): ?string
     {
-        return $this->this;
+        return $this->category;
     }
 
-    public function getDescription()
+    public function getDescription(): ?string
     {
-        return $this->description;
+        return $this->descript;
+    }
+
+    public function getCreationDate():?DateTime
+    {
+        return $this->Creation_Date;
     }
     
-    public function setIdCours(int $idCours)
+    public function setidCoursee(?int $idCourse): void
     {
-        $this->idCours=$idCours;
+        $this->idCourse=$idCourse;
     }
 
-    public function setIdCreateur(int $idCreateur)
+    public function setIdCreator(?int $idCreator): void
     {
-        $this->idCreateur=$idCreateur;
+        $this->idCreator=$idCreator;
     }
 
+    public function setTitle(?string $title): void
+    {
+        $this->title = $title;
+    }
+
+    public function setCategory(?string $category): void
+    {
+        $this->category = $category;
+    } 
+
+    public function setDescription(?string $descript): void
+    {
+        $this->descript = $descript;
+    }
+
+    public function setCreationdate(?DateTime $Creation_Date): void 
+    {
+        $this->Creation_Date= $Creation_Date;
+    }
 }
 
 ?>
