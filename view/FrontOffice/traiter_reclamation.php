@@ -7,18 +7,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupérer les données du formulaire
     $nom = trim($_POST['nom']);
     $email = trim($_POST['email']);
+    $telephone = trim($_POST['telephone']);
     $sujet = trim($_POST['sujet']);
     $description = trim($_POST['description']);
+    $statut = 'Non répondu'; // Définir un statut par défaut ('Non répondu')
 
     // Validation côté serveur
     $erreurs = [];
 
+    // Validation des autres champs
     if (empty($nom)) {
         $erreurs[] = "Le champ 'Nom' est obligatoire.";
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $erreurs[] = "L'adresse e-mail n'est pas valide.";
+    }
+
+    // Validation du téléphone
+    if (empty($telephone)) {
+        $erreurs[] = "Le champ 'Téléphone' est obligatoire.";
+    } elseif (!preg_match("/^\+?[1-9]\d{1,14}$/", $telephone)) {
+        $erreurs[] = "Le numéro de téléphone n'est pas valide. Exemple : +21612345678.";
     }
 
     if (empty($sujet)) {
@@ -37,8 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Si tout est valide, créer une instance du modèle Reclamation
-    $reclamation = new Reclamation($nom, $email, $sujet, $description); // No ID required
+    // Si tout est valide, créer une instance du modèle Reclamation avec statut
+    $reclamation = new Reclamation($nom, $email, $telephone, $sujet, $description, $statut); // Ajout du statut
 
     // Créer une instance du contrôleur
     $reclamationController = new ReclamationController();
@@ -46,12 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Envoyer l'objet Reclamation au contrôleur pour ajout dans la base de données
     $reclamationController->addReclamation($reclamation);
 
-    // Afficher l'ID après l'insertion
+    // Afficher l'ID après l'insertion ou rediriger vers une autre page
     header('Location: ../FrontOffice/contact administrateur.html');
-    echo "<p style='color: green;'>Votre réclamation a été envoyée avec succès. ID: " . $reclamation->getId() . "</p>";
-    
 } else {
     echo "<p style='color: red;'>Méthode non autorisée.</p>";
- 
 }
 ?>
