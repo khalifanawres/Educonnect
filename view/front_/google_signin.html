@@ -1,0 +1,34 @@
+<!-- google_signin.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign-In</title>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="683896753133-t1u8r32o6tep42a6pkujund3j1ramn5i.apps.googleusercontent.com">
+</head>
+<body>
+    <div id="g_id_onload"
+         data-client_id="683896753133-t1u8r32o6tep42a6pkujund3j1ramn5i.apps.googleusercontent.com"
+         data-context="use"
+         data-ux_mode="popup"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin"
+         data-type="standard"
+         data-shape="rectangular"
+         data-theme="outline"
+         data-text="signin_with"
+         data-size="large"
+         data-logo_alignment="left">
+    </div>
+
+    <script>
+        function handleCredentialResponse(response) {
+            window.parent.postMessage({ type: 'googleSignIn', payload: response.credential }, '*');
+        }
+    </script>
+</body>
+</html>
