@@ -1,0 +1,104 @@
+.competitions__section {
+    padding-top: 80px;
+    background-color: var(--section-bg-two);
+}
+
+.competitions_inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section__header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section__header h2 {
+    font-size: 60px;
+    font-weight: bold;
+    color: var(--black-color);
+}
+
+.section__header h2 span {
+    color: var(--theme-color); 
+}
+
+.section__header p {
+    font-size: 18px;
+    color: var(--black-color);
+}
+
+.competitions__card__wrap {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 16px;
+    color: var(--black-color);
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 8px;
+}
+
+.form-group textarea {
+    resize: vertical;
+    height: 120px;
+}
+
+.error-messages {
+    background-color: #f8d7da;
+    padding: 10px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    color: #721c24;
+    font-size: 14px;
+}
+
+.cmn--btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: var(--theme-color);
+    color: var(--white-color);
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.cmn--btn:hover {
+    background-color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+    .competitions__section {
+        padding-top: 50px;
+    }
+
+    .section__header h2 {
+        font-size: 28px;
+    }
+
+    .form-group input, .form-group textarea {
+        font-size: 14px;
+    }
+}

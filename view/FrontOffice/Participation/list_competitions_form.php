@@ -1,3 +1,7 @@
+<?php 
+include_once('../../BackOffice/Competitions/list_competitions.php');
+?>
+
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
@@ -7,479 +11,202 @@
    <meta name="author" content="NextGenerationDev">
    <title>Atos - Multipurpose Web Hosting HTML Template</title>
    <!--Favicon img-->
-   <link rel="shortcut icon" href="assets/img/favicon/favicon.png">
+   <link rel="shortcut icon" href="../assets/img/favicon/favicon.png">
    <!--Bootstarp min css-->
-   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+   <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
    <!--Bootstarp map css-->
-   <link rel="stylesheet" href="assets/css/bootstrap.css.map">
+   <link rel="stylesheet" href="../assets/css/bootstrap.css.map">
    <!--Odometer css-->
-   <link rel="stylesheet" href="assets/css/odometer.css">
+   <link rel="stylesheet" href="../assets/css/odometer.css">
    <!--Owl Carousel css-->
-   <link rel="stylesheet" href="assets/css/owl.min.css">
+   <link rel="stylesheet" href="../assets/css/owl.min.css">
    <!--Owl Carousel Theme css-->
-   <link rel="stylesheet" href="assets/css/owl.theme.default.min.css">
+   <link rel="stylesheet" href="../assets/css/owl.theme.default.min.css">
    <!--All min css-->
-   <link rel="stylesheet" href="assets/css/all.min.css">
+   <link rel="stylesheet" href="../assets/css/all.min.css">
    <!--Animate css-->
-   <link rel="stylesheet" href="assets/css/animate.css">
+   <link rel="stylesheet" href="../assets/css/animate.css">
    <!--Owl Nice select css-->
-   <link rel="stylesheet" href="assets/css/nice-select.css">
-   <link rel="stylesheet" href="assets/css/magnific-popup.css">
+   <link rel="stylesheet" href="../assets/css/nice-select.css">
+    <link rel="stylesheet" href="../assets/css/magnific-popup.css">
    <!--main css-->
-   <link rel="stylesheet" href="assets/css/main.css">
+   <link rel="stylesheet" href="../assets/css/main.css">
+   <!--competition css-->
+   <link rel="stylesheet" href="../assets/css/list_competitions.css">
 </head>
 
 <body>
 
 
-
+<!--==== Scrool Top Bottom Here ======= -->
+<div id="progress">
+   <span id="valiu"><i class="fas fa-arrow-up"></i></span>
+</div>
+<!--==== Scrool Top Bottom End ======= -->
 
 <div class="signin__signup__wrap">
-  
+   <a href="#0" class="cmn--btn" data-bs-toggle="modal" data-bs-target="#register">
+      <span>Sign In</span>
+   </a>
+   <a href="#0" class="cmn--btn" data-bs-toggle="modal" data-bs-target="#login">
+      <span>Sign Up</span>
+   </a>
 </div>
 
 <!--Header Here-->
-<header class="header-section">
-   <div class="container">
-      <div class="header-wrapper">
-         <div class="logo-menu">
-            <a href="index.html" class="logo">
-               <img src="assets/img/logo/logo2.png" alt="img">
+   <header class="header-section">
+      <div class="container">
+         <div class="header-wrapper">
+            <div class="logo-menu">
+               <a href="index.html" class="logo">
+                  <img src="../assets/img/logo/logo2.png" alt="img">
+               </a>
+            </div>
+            <div class="header-bar d-lg-none">
+               <span></span>
+               <span></span>
+               <span></span>
+            </div>
+            <ul class="main-menu">
+               <li class="active">
+                  <a href="#0">Accueil <i class="fas fa-chevron-down"></i></a>
+                  
+               </li>
+               <li>
+                  <a href="about.html">Nos offres</a>
+               </li>
+               <li>
+                  <a href="pricing.html">Nos cours</a>
+               </li>
+               <li>
+                  <a href="list_competitions_form.php">compétitions</a>
+               </li>
+               <li>
+                  <a href="vpshost.html">Projets</a>
+               </li>
+               <li>
+                  <a href="#0">Réclamation<i class="fas fa-chevron-down"></i></a>
+                  <ul class="sub-menu">
+                     <li class="subtwohober">
+                        <a href="../contact professeur.html">
+                           <span class="icon"><i class="fa-brands fa-audible"></i></span>
+                           <span>contact professeur</span>
+                        </a>
+                     </li>
+                     <li class="subtwohober">
+                        <a href="../contact administrateur.html">
+                           <span class="icon"><i class="fa-solid fa-server"></i></span>
+                           <span>contact administrateur</span>
+                        </a>
+                     </li>
+                     
+                  </ul>
+               </li>
+               <li class="btn--items">
+                  <a href="contact.html" class="cmn--btn">
+                     <span>contact</span>
+                  </a>
+               </li>
+            </ul>
+            <a href="contact.html" class="cmn--btn">
+               <span>contact</span>
             </a>
          </div>
-         <div class="header-bar d-lg-none">
-            <span></span>
-            <span></span>
-            <span></span>
-         </div>
-         <ul class="main-menu">
-            <li class="active">
-               <a href="#0">Accueil <i class="fas fa-chevron-down"></i></a>
-               
-            </li>
-            <li>
-               <a href="about.html">Nos offres</a>
-            </li>
-            <li>
-               <a href="pricing.html">Nos cours</a>
-            </li>
-            <li>
-               <a href="blog.html">compétitions</a>
-               <a href="Competitions/list_competitions_form.php">compétitions</a>
-            </li>
-            <li>
-               <a href="vpshost.html">Projets</a>
-            </li>
-            <li>
-               <a href="#0">Réclamation<i class="fas fa-chevron-down"></i></a>
-               <ul class="sub-menu">
-               
-                 
-                  <li class="subtwohober">
-                     <a href="contact administrateur.html">
-                        <span class="icon"><i class="fa-solid fa-server"></i></span>
-                        <span>contact administrateur</span>
-                     </a>
-                  </li>
-                  <li class="subtwohober">
-                     <a href="historique.php">
-                        <span class="icon"><i class="fa-brands fa-audible"></i></span>
-                        <span>Historique</span>
-                     </a>
-                  </li>
-               </ul>
-            </li>
-            <li class="btn--items">
-               <a href="contact.html" class="cmn--btn">
-                  <span>contact</span>
-               </a>
-            </li>
-         </ul>
-         <a href="contact.html" class="cmn--btn">
-            <span>contact</span>
-         </a>
       </div>
-   </div>
-</header>
+   </header>
 <!--Header End-->
+
 <!--Banner Start-->
 <section class="breadcumnd__banner">
    <div class="container">
       <div class="row align-items-center">
          <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6">
             <div class="banner__content">
-               <h6>
-                  
-               </h6>
                <h4>
-                 
+                  contact,
+                  Feel free to contact
                </h4>
-               
-               <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae et sunt.
+               <p class="b__space">
+                  
                </p>
                <ul class="ssd__list">
                   <li>
-                    <span><i class="fa-solid fa-arrow-right"></i></span> <span>World hosting services.</span>
+                    <span><i class="fa-solid fa-arrow-right"></i></span> <span>Unlimited Contact</span>
                   </li>
                   <li>
-                     <span><i class="fa-solid fa-arrow-right"></i></span> <span>Faster Unlimited Services</span>
+                     <span><i class="fa-solid fa-arrow-right"></i></span> <span>Contact For Support Team</span>
+                  </li>
+                  <li>
+                     <span><i class="fa-solid fa-arrow-right"></i></span> <span>24/Hours Contact Our Team</span>
                   </li>
                </ul>
                <a href="#0" class="cmn--btn border__trans">
-                  <span>Get Sterted</span>
+                  <span>contact</span>
                </a>
             </div>
          </div>
          <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6">
             <div class="banner__Thumb">
-               <img src="assets/img/hosting/clidhost.png" alt="about-img">
+               <img src="../assets/img/hosting/contact.png" alt="about-img">
             </div>
          </div>
       </div>
    </div>
 </section>
 <!--Banner End-->
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Réclamation - Template</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-        }
-        .text-danger {
-            color: red;
-            font-size: 0.9em;
-            display: none; /* Masqué par défaut */
-        }
-        .form-control {
-            margin-bottom: 15px;
-        }
-        .form-control input,
-        .form-control textarea {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            color: #000;
-            background-color: #fff;
-        }
-        .cmn--btn {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .cmn--btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <div class="contact__section pt-80">
-        <div class="contact_inner">
-            <div class="container">
-                <div class="section__header center mb-5">
-                    <h2 class="text-black">Réclamation <span class="text-base"></span></h2>
-                    <p class="text-black">Veuillez remplir ce formulaire pour soumettre une réclamation.</p>
-                </div>
-                <div class="row justify-content-between align-items-center">
-                    <div class="col-lg-12">
-                        <div class="form_area">
-                            <form id="reclamationForm" method="POST" action="traiter_reclamation.php">
-                                <div class="form-control">
-                                    <label for="nom">Nom :</label>
-                                    <input type="text" id="nom" name="nom" placeholder="Votre nom" required>
-                                </div>
-                                <div class="form-control">
-                                    <label for="email">Email :</label>
-                                    <input type="email" id="email" name="email" placeholder="Votre email" required>
-                                    <small id="emailError" class="text-danger">Veuillez entrer une adresse e-mail valide.</small>
-                                </div>
-                                <div class="form-control">
-                                    <label for="sujet">Sujet :</label>
-                                    <input type="text" id="sujet" name="sujet" placeholder="Sujet" required>
-                                </div>
-                                <div class="form-control">
-                                    <label for="description">Description :</label>
-                                    <textarea id="description" name="description" cols="10" rows="5" placeholder="Décrivez votre réclamation ici..." required></textarea>
-                                </div>
-                                <button type="submit" class="cmn--btn"><span>Envoyer la réclamation</span></button>
-                                <p class="form-message"></p>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const form = document.getElementById("reclamationForm");
-            const emailField = document.getElementById("email");
-            const emailError = document.getElementById("emailError");
-
-            // Efface les données au chargement de la page
-            form.reset();
-
-            // Validation de l'email à la sortie du champ
-            emailField.addEventListener("blur", function () {
-                if (!emailField.value.includes("@")) {
-                    emailError.style.display = "block"; // Affiche le message d'erreur
-                } else {
-                    emailError.style.display = "none"; // Cache le message d'erreur
-                }
-            });
-
-            // Validation finale au moment de la soumission
-            form.addEventListener("submit", function (event) {
-                if (!emailField.value.includes("@")) {
-                    emailError.style.display = "block";
-                    event.preventDefault(); // Empêche la soumission
-                } else {
-                    emailError.style.display = "none";
-                }
-            });
-        });
-    </script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulaire de Réclamation</title>
-    <style>
-        .text-danger {
-            color: red;
-            font-size: 12px;
-        }
-        .form-control {
-            margin-bottom: 10px;
-        }
-        .form-control label {
-            display: block;
-            font-weight: bold;
-        }
-        .form-control input,
-        .form-control select,
-        .form-control textarea {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-        }
-        .cmn--btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .cmn--btn:hover {
-            background-color: #45a049;
-        }
-    </style>
-</head>
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulaire de Réclamation</title>
-    <style>
-        .text-danger {
-            color: red;
-        }
-        .form-control {
-            margin-bottom: 10px;
-        }
-        .form-control input,
-        .form-control textarea {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        .cmn--btn {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .cmn--btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-
-<body>
-   <div class="contact__section pt-80">
-      <div class="contact_inner">
-          <div class="container">
-              <div class="section__header center mb-5">
-                  <h2 class="text-black">Réclamation <span class="text-base"></span></h2>
-                  <p class="text-black">Veuillez remplir ce formulaire pour soumettre une réclamation.</p>
+<!--Competitions Here-->
+<div class="competitions__section pt-80">
+   <div class="competitions_inner">
+       <div class="container">
+         <div class="section__header center mb-5">
+            <h2 class="text-black wow fadeInDown" data-wow-delay="0.2s">
+               Liste des <span class="text-base">Compétitions</span>
+            </h2>
+            <p class="text-black wow fadeInDown" data-wow-delay="0.4s">
+               Participer aux compétitions en toute simplicité.
+            </p>
+         </div>
+           <div class="row justify-content-center align-items-center">
+            <div class="col-lg-12">
+              <div class="competitions__card__wrap">
+                  <table class="competitions-table">
+                      <thead>
+                          <tr>
+                              <th>Nom</th>
+                              <th>Description</th>
+                              <th>Durée</th>
+                              <th>Contenu</th>
+                              <th>Actions</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <?php
+                          if ($competitions) {
+                              foreach ($competitions as $competition) {
+                                  echo "<tr>";
+                                  echo "<td>" . htmlspecialchars($competition['nom']) . "</td>";
+                                  echo "<td>" . htmlspecialchars($competition['description']) . "</td>";
+                                  echo "<td>" . htmlspecialchars($competition['duree']) . " jours</td>";
+                                  echo "<td>" . htmlspecialchars($competition['contenu']) . "</td>";
+                                  echo "<td>
+                                          <a href='participer_competition.php' class='cmn--btn'>Participer</a>
+                                        </td>";
+                                  echo "</tr>";
+                              }
+                          } else {
+                              echo "<tr><td colspan='5'>Aucune compétition trouvée.</td></tr>";
+                          }
+                          ?>
+                      </tbody>
+                  </table>
               </div>
-              <div class="row justify-content-between align-items-center">
-                  <div class="col-lg-12">
-                      <div class="form_area">
-                          <form id="reclamationForm" method="POST" action="traiter_reclamation.php">
-                              <div class="form-control">
-                                  <label for="nom">Nom :</label>
-                                  <input type="text" id="nom" name="nom" placeholder="Votre nom" required>
-                              </div>
-                              <div class="form-control">
-                                  <label for="email">Email :</label>
-                                  <input type="email" id="email" name="email" placeholder="Votre email" required>
-                                  <small id="emailError" class="text-danger" style="display: none;">Veuillez entrer une adresse e-mail valide.</small>
-                              </div>
-                              <div class="form-control">
-                                  <label for="telephone"> Téléphone :</label>
-                                  <div style="display: flex; align-items: center;">
-                                      <span style="margin-right: 5px;">+216</span>
-                                      <input type="text" id="telephone" name="telephone" placeholder="XXXXX" maxlength="8" pattern="\d{8}" required>
-                                  </div>
-                                  <small id="telephoneError" class="text-danger" style="display: none;">Veuillez entrer un numéro valide de 8 chiffres.</small>
-                              </div>
-                              <div class="form-control">
-                                  <label for="sujet">Sujet :</label>
-                                  <input type="text" id="sujet" name="sujet" placeholder="Sujet" required>
-                                  <small id="sujetError" class="text-danger" style="display: none;">Le sujet doit contenir au moins 5 caractères.</small>
-                              </div>
-                              <div class="form-control">
-                                  <label for="description">Description :</label>
-                                  <textarea id="description" name="description" cols="10" rows="5" placeholder="Décrivez votre réclamation ici..." required></textarea>
-                                  <small id="descriptionError" class="text-danger" style="display: none;">La description doit contenir au moins 20 caractères.</small>
-                              </div>
-                              <button type="submit" class="cmn--btn"><span>Envoyer la réclamation</span></button>
-                              <p class="form-message"></p>
-                          </form>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-  <script>
-   document.addEventListener("DOMContentLoaded", function () {
-       const form = document.getElementById("reclamationForm");
-       const emailField = document.getElementById("email");
-       const emailError = document.getElementById("emailError");
-       const telephoneField = document.getElementById("telephone");
-       const telephoneError = document.getElementById("telephoneError");
-       const sujetField = document.getElementById("sujet");
-       const sujetError = document.getElementById("sujetError");
-       const descriptionField = document.getElementById("description");
-       const descriptionError = document.getElementById("descriptionError");
-
-       // Liste des mots interdits (à personnaliser)
-       const badWords = [
-            'merde', 'connard', 'pute', 'fuck', 'shit', 'bitch', 'raciste', 'violence', // Français et Anglais
-            'salopard', 'enculé', 'putain', 'bâtard', 'salope', 'connasse', 'couille', 'fils de pute',
-            'motherfucker', 'asshole', 'cunt', 'twat', 'dickhead', 'bastard', 'douchebag', 'prick',
-            'faggot', 'slut', 'whore', 'bitchass', 'pussy', 'cock', 'jerk', 'bimbo', 'loser',
-            'stupid', 'idiot', 'retard', 'moron', 'dumbass', 'shithead', 'fuckface', 'troll',
-            'racist', 'terrorist', 'nazi', 'extremist', 'kill yourself', 'suicide', 'rape', 'molester'
-        ];
-
-       // Efface les données au chargement de la page
-       form.reset();
-
-       // Fonction pour vérifier la présence de mots inappropriés
-       function checkInappropriateWords(text) {
-           for (let word of badWords) {
-               if (text.toLowerCase().includes(word.toLowerCase())) {
-                   return true;
-               }
-           }
-           return false;
-       }
-
-       // Validation finale au moment de la soumission
-       form.addEventListener("submit", function (event) {
-           let valid = true;
-
-           // Validation de l'email
-           if (!emailField.value.includes("@")) {
-               emailError.style.display = "block";
-               valid = false;
-           } else {
-               emailError.style.display = "none";
-           }
-
-           // Validation du téléphone
-           const telephoneValue = telephoneField.value;
-           const regex = /^\d{8}$/; // Regex pour valider 8 chiffres
-           if (!regex.test(telephoneValue)) {
-               telephoneError.style.display = "block";
-               valid = false;
-           } else {
-               telephoneError.style.display = "none";
-           }
-
-           // Validation du sujet
-           if (sujetField.value.trim().length < 5) {
-               sujetError.style.display = "block";
-               valid = false;
-           } else {
-               sujetError.style.display = "none";
-           }
-
-           // Validation de la description
-           if (descriptionField.value.trim().length < 20) {
-               descriptionError.style.display = "block";
-               valid = false;
-           } else {
-               descriptionError.style.display = "none";
-           }
-
-           // Vérification des mots inappropriés dans la description
-           if (checkInappropriateWords(descriptionField.value)) {
-               alert("Votre réclamation contient des mots inappropriés. Veuillez reformuler.");
-               valid = false;
-           }
-
-           // Empêche la soumission du formulaire si une validation échoue
-           if (!valid) {
-               event.preventDefault(); // Empêche l'envoi du formulaire
-           }
-       });
-   });
- </script>
-
-</body>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-   var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-   (function(){
-   var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-   s1.async=true;
-   s1.src='https://embed.tawk.to/67595f6b49e2fd8dfef63900/1ieqhpfng';
-   s1.charset='UTF-8';
-   s1.setAttribute('crossorigin','*');
-   s0.parentNode.insertBefore(s1,s0);
-   })();
-   </script>
-   <!--End of Tawk.to Script-->
-
-</html>
-
+           </div>
+           </div>
+       </div>
+   </div>
+</div>
+<!--Competitions End-->
 
 <!--Footer Here-->
 <footer class="footer-section section-bg pt-120">
@@ -490,7 +217,7 @@
                <div class="widget-items">
                   <div class="footer-head">
                      <a href="index.html" class="footer-logo">
-                        <img src="assets/img/logo/logo-black.png" alt="f-logo">
+                        <img src="../assets/img/logo/logo-black.png" alt="f-logo">
                      </a>
                   </div>
                   <div class="content-area">
@@ -612,14 +339,14 @@
                <div class="widget-items">
                   <div class="footer-head">
                      <h5 class="title">
-                        Contact Us
+                        contact
                      </h5>
                   </div>
                   <div class="content-area">
                      <ul class="contact">
                         <li>
                            <div class="phone-icon">
-                              <img src="assets/img/footer/email.png" alt="email">
+                              <img src="../assets/img/footer/email.png" alt="email">
                            </div>
                            <a href="#0" class="email-part">
                               <span>Email:</span>
@@ -628,7 +355,7 @@
                         </li>
                         <li>
                            <div class="phone-icon">
-                              <img src="assets/img/footer/phone.png" alt="phone">
+                              <img src="../assets/img/footer/phone.png" alt="phone">
                            </div>
                            <a href="#0" class="email-part">
                               <span>Phone:</span>
@@ -684,7 +411,7 @@
                         <div class="tab-pane fade" id="homeemail" role="tabpanel">
                            <div class="form__tabs__wrap">
                                  <div class="focus__icon">
-                                    <img src="assets/img/modal/flowers.png" alt="f-img">
+                                    <img src="../assets/img/modal/flowers.png" alt="f-img">
                                  </div>
                                  <form action="#0">
                                     <div class="form__grp">
@@ -751,7 +478,7 @@
                         <div class="tab-pane fade show active" id="contactup" role="tabpanel">
                            <div class="form__tabs__wrap">
                                  <div class="focus__icon">
-                                    <img src="assets/img/modal/flowers.png" alt="f-img">
+                                    <img src="../assets/img/modal/flowers.png" alt="f-img">
                                  </div>
                                  <form action="#0">
                                     <div class="form__grp">
@@ -841,7 +568,7 @@
                         <div class="tab-pane fade show active" id="home2" role="tabpanel">
                            <div class="form__tabs__wrap">
                                  <div class="focus__icon">
-                                    <img src="assets/img/modal/flowers.png" alt="f-img">
+                                    <img src="../assets/img/modal/flowers.png" alt="f-img">
                                  </div>
                                  <form action="#0">
                                     <div class="form__grp">
@@ -908,7 +635,7 @@
                         <div class="tab-pane fade" id="contact2" role="tabpanel">
                            <div class="form__tabs__wrap">
                                  <div class="focus__icon">
-                                    <img src="assets/img/modal/flowers.png" alt="f-img">
+                                    <img src="../assets/img/modal/flowers.png" alt="f-img">
                                  </div>
                                  <form action="#0">
                                     <div class="form__grp">
@@ -979,24 +706,24 @@
 
 
    <!--Jquery 3 6 0 Min Js-->
-   <script src="assets/js/jquery-3.6.0.min.js"></script>
+   <script src="../assets/js/jquery-3.6.0.min.js"></script>
    <!--Bootstrap bundle Js-->
-   <script src="assets/js/bootstrap.bundle.js"></script>
+   <script src="../assets/js/bootstrap.bundle.js"></script>
    <!--Waypoint Jquery min Js-->
-   <script src="assets/js/jquery.waypoints.min.js"></script>
+   <script src="../assets/js/jquery.waypoints.min.js"></script>
    <!--Viewport Jquery Js-->
-   <script src="assets/js/viewport.jquery.js"></script>
+   <script src="../assets/js/viewport.jquery.js"></script>
    <!--Wow min Js-->
-   <script src="assets/js/wow.min.js"></script>
+   <script src="../assets/js/wow.min.js"></script>
    <!--Odometer Up min Js-->
-   <script src="assets/js/odometer.min.js"></script>
+   <script src="../assets/js/odometer.min.js"></script>
    <!--Owl Carousel min Js-->
-   <script src="assets/js/owl.min.js"></script>
+   <script src="../assets/js/owl.min.js"></script>
    <!--Owl nice Jquery min Js-->
-   <script src="assets/js/jquery.nice-select.min.js"></script> 
-   <script src="assets/js/magnific-popup.js"></script>
+   <script src="../assets/js/jquery.nice-select.min.js"></script> 
+   <script src="../assets/js/magnific-popup.js"></script> 
    <!--main Js-->
-   <script src="assets/js/main.js"></script>
+   <script src="../assets/js/main.js"></script>
 
 </body>
 
