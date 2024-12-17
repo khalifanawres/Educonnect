@@ -159,8 +159,6 @@ $competitions =  $compController->listCompetitions();
    </div>
 </section>
 <!--Banner End-->
-
-<!--Competitions Here-->
 <div class="competitions__section pt-80">
    <div class="competitions_inner">
        <div class="container">
@@ -172,13 +170,26 @@ $competitions =  $compController->listCompetitions();
                Consultez et gérez les compétitions en toute simplicité.
             </p>
          </div>
-           <div class="row justify-content-center align-items-center">
+
+         <!-- Formulaire de recherche -->
+         <div class="row justify-content-center mb-4">
+            <div class="col-lg-8">
+                <form method="GET" class="search-form">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" placeholder="Rechercher une compétition" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                        <button class="cmn--btn" type="submit">Rechercher</button>
+                    </div>
+                </form>
+            </div>
+         </div>
+
+         <div class="row justify-content-center align-items-center">
             <div class="col-lg-12">
               <div class="competitions__card__wrap">
                   <table class="competitions-table">
                       <thead>
                           <tr>
-                              <th>user</th>
+                              <th>User</th>
                               <th>Nom</th>
                               <th>Description</th>
                               <th>Durée</th>
@@ -188,39 +199,43 @@ $competitions =  $compController->listCompetitions();
                       </thead>
                       <tbody>
                       <?php
-if ($competitions) {
-    foreach ($competitions as $competition) {
-        echo "<tr>";
-        echo "<td><img src='/Educonnect/user.png' alt='Image par défaut' style='width: 50px; height: 50px;'></td>";
-        echo "<td>" . htmlspecialchars($competition['nom']) . "</td>";
-        echo "<td>" . htmlspecialchars($competition['description']) . "</td>";
-        echo "<td>" . htmlspecialchars($competition['duree']) . " jours</td>";
-        echo "<td>" . htmlspecialchars($competition['contenu']) . "</td>";
-        // Correcte la ligne avec l'attribut href et l'onclick
-        echo "<td><a href='../../BackOffice/Participation/add_participation.php?id_competition=" . $competition['id'] . "' 
-                     class='cmn--btn' 
-                     onclick='return confirm(\"Êtes-vous sûr de vouloir participer à cette compétition ?\");'>
-                     Participer
-              </a></td>";
-        echo "</tr>";
-    }
-} else {
-    echo "<tr><td colspan='5'>Aucune compétition trouvée.</td></tr>";
-}
-?>
+                      // Ajout de la logique pour filtrer les résultats avec le paramètre "search"
+                      $search = isset($_GET['search']) ? $_GET['search'] : '';
 
+                      if ($competitions) {
+                          foreach ($competitions as $competition) {
+                              // Filtrer les compétitions en fonction du terme de recherche
+                              if (empty($search) || stripos($competition['nom'], $search) !== false || stripos($competition['description'], $search) !== false) {
+                                  echo "<tr>";
+                                  echo "<td><img src='/Educonnect/user.png' alt='Image par défaut' style='width: 50px; height: 50px;'></td>";
+                                  echo "<td>" . htmlspecialchars($competition['nom']) . "</td>";
+                                  echo "<td>" . htmlspecialchars($competition['description']) . "</td>";
+                                  echo "<td>" . htmlspecialchars($competition['duree']) . " jours</td>";
+                                  echo "<td>" . htmlspecialchars($competition['contenu']) . "</td>";
+                                  echo "<td><a href='../../BackOffice/Participation/add_participation.php?id_competition=" . $competition['id'] . "' 
+                                               class='cmn--btn' 
+                                               onclick='return confirm(\"Êtes-vous sûr de vouloir participer à cette compétition ?\");'>
+                                               Participer
+                                        </a></td>";
+                                  echo "</tr>";
+                              }
+                          }
+                      } else {
+                          echo "<tr><td colspan='6'>Aucune compétition trouvée.</td></tr>";
+                      }
+                      ?>
                       </tbody>
                   </table>
               </div>
            </div>
-            <div class="col-lg-12 text-center">
+           <div class="col-lg-12 text-center">
                   <a href="add_competition_form.php" class="cmn--btn"><span>Ajouter une nouvelle compétition</span></a>
             </div>
            </div>
        </div>
    </div>
 </div>
-<!--Competitions End-->
+
 
 <!--Footer Here-->
 <footer class="footer-section section-bg pt-120">

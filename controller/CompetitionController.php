@@ -15,6 +15,14 @@ class CompetitionController
             die('Error: ' . $e->getMessage());
         }
     }
+    public function searchCompetitions($search)
+{
+    $query = "SELECT * FROM competitions WHERE nom LIKE :search OR description LIKE :search";
+    $query = $db->prepare($sql);
+    $stmt->execute(['search' => '%' . $search . '%']);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
     function deleteCompetition($id)
     {
