@@ -56,11 +56,10 @@ if (isset($_GET['sort'])) {
                     </a>
                 </div>
                 <ul class="main-menu">
-                    <li><a href="index.html">Accueil</a></li>
-                    <li><a href="about.html">Nos offres</a></li>
-                    <li><a href="category.html">Nos cours</a></li>
-                    <li><a href="pricing.html">Compétitions</a></li>
-                    <li><a href="contact.html">Réclamation</a></li>
+                    <li><a href="FrontOffice/Acceuil.php">Accueil</a></li>
+                    <li><a href="FrontOffice/Acceuil.php">Nos cours</a></li>
+                    <li><a href="FrontOffice/Competitions/list_competitions_form.php">Compétitions</a></li>
+                    <li><a href="FrontOffice/contact administrateur.html">Réclamation</a></li>
                     
                 </ul>
             </div>

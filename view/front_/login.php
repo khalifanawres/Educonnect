@@ -193,7 +193,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </h4>
               <ul>
                  <li>
-                    <a href="#0">
+                    <a href="../FrontOffice/Acceuil.php">
                        Home
                     </a>
                  </li>
@@ -478,7 +478,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="focus__icon">
                                    <img src="assets/img/modal/flowers.png" alt="f-img">
                                 </div>
-   <form action="validation.js" method="POST">
+   <form action="assets/js/validation.js" method="POST">
          <div>
         <!-- Boutons pour sélectionner le rôle -->
         <ul class="nav nav-tabs" id="myTabing" role="tablist">

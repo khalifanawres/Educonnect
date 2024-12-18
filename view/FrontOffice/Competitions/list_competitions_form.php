@@ -49,15 +49,6 @@ $competitions =  $compController->listCompetitions();
 </div>
 <!--==== Scrool Top Bottom End ======= -->
 
-<div class="signin__signup__wrap">
-   <a href="#0" class="cmn--btn" data-bs-toggle="modal" data-bs-target="#register">
-      <span>Sign In</span>
-   </a>
-   <a href="#0" class="cmn--btn" data-bs-toggle="modal" data-bs-target="#login">
-      <span>Sign Up</span>
-   </a>
-</div>
-
 <!--Header Here-->
    <header class="header-section">
       <div class="container">
@@ -74,30 +65,21 @@ $competitions =  $compController->listCompetitions();
             </div>
             <ul class="main-menu">
                <li class="active">
-                  <a href="#0">Accueil <i class="fas fa-chevron-down"></i></a>
+                  <a href="../Acceuil.php">Accueil <i class="fas fa-chevron-down"></i></a>
                   
                </li>
                <li>
-                  <a href="about.html">Nos offres</a>
-               </li>
-               <li>
-                  <a href="pricing.html">Nos cours</a>
+                  <a href="#0">Nos cours</a>
                </li>
                <li>
                   <a href="list_competitions_form.php">compétitions</a>
                </li>
                <li>
-                  <a href="vpshost.html">Projets</a>
+                  <a href="vpshost.html">Evènements</a>
                </li>
                <li>
                   <a href="#0">Réclamation<i class="fas fa-chevron-down"></i></a>
                   <ul class="sub-menu">
-                     <li class="subtwohober">
-                        <a href="../contact professeur.html">
-                           <span class="icon"><i class="fa-brands fa-audible"></i></span>
-                           <span>contact professeur</span>
-                        </a>
-                     </li>
                      <li class="subtwohober">
                         <a href="../contact administrateur.html">
                            <span class="icon"><i class="fa-solid fa-server"></i></span>
@@ -108,13 +90,13 @@ $competitions =  $compController->listCompetitions();
                   </ul>
                </li>
                <li class="btn--items">
-                  <a href="contact.html" class="cmn--btn">
-                     <span>contact</span>
+                  <a href="../../front_/login.php" class="cmn--btn">
+                     <span>Connexion</span>
                   </a>
                </li>
             </ul>
-            <a href="contact.html" class="cmn--btn">
-               <span>contact</span>
+            <a href="../../front_/login.php" class="cmn--btn">
+               <span>Connexion</span>
             </a>
          </div>
       </div>
