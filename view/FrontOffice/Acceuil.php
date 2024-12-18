@@ -53,7 +53,7 @@
          <div class="header-wrapper">
             <div class="logo-menu">
                <a href="index.html" class="logo">
-                  <img src="../assets/img/logo/logo2.png" alt="img">
+                  <img src="assets/img/logo/logo2.png" alt="img">
                </a>
             </div>
             <div class="header-bar d-lg-none">

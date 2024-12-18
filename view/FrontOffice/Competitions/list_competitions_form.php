@@ -75,7 +75,7 @@ $competitions =  $compController->listCompetitions();
                   <a href="list_competitions_form.php">compétitions</a>
                </li>
                <li>
-                  <a href="vpshost.html">Evènements</a>
+                  <a href="../../afficher.php">Evènements</a>
                </li>
                <li>
                   <a href="#0">Réclamation<i class="fas fa-chevron-down"></i></a>
