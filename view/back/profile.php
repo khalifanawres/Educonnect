@@ -3,7 +3,7 @@ include '../../controller/UserController.php';
 session_start();
 
 if (!isset($_SESSION['user'])) {
-  header("Location: /..//projet/view/front_/login.php");
+  header("Location: ../front_/login.php");
   exit();
 }
 

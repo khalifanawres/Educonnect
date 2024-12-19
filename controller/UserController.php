@@ -430,7 +430,7 @@ public function sendVerificationEmail($email, $verificationCode)
         $mail->isHTML(true);
         $mail->Subject = 'Verify Your Email Address';
         $mail->Body = "Please click the link below to verify your email address:<br>
-        <a href='http://localhost/projet/view/front_/verify_email.php?code=$verificationCode'>Verify Email</a>";
+        <a href='http://localhost/Educonnect/view/front_/verify_email.php?code=$verificationCode'>Verify Email</a>";
 
         $mail->send();
     } catch (Exception $e) {

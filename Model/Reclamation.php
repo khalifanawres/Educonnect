@@ -1,115 +1,94 @@
 <?php
 class Reclamation {
-    public ?int $id;
-    public $nom;
-    public $email;
-    public $sujet;
-    public $message;
+    // Properties
+    public ?int $id; // Nullable integer for ID
+    public string $nom; // Name of the user
+    public string $email; // Email of the user
+    public ?string $telephone; // Optional phone number
+    public string $sujet; // Subject of the claim
+    public ?string $message; // Optional message content
+    public string $statut; // Status of the claim
 
-    // Constructor with id as nullable
-    public function __construct($nom, $email, $sujet, $message, ?int $id = null) {
+    // Constructor
+    public function __construct(
+        string $nom, 
+        string $email, 
+        ?string $telephone, 
+        string $sujet, 
+        ?string $message = null, 
+        string $statut = 'en cours', 
+        ?int $id = null
+    ) {
         $this->id = $id;
         $this->nom = $nom;
         $this->email = $email;
+        $this->telephone = $telephone;
         $this->sujet = $sujet;
         $this->message = $message;
+        $this->statut = $statut;
     }
 
-    // Getter methods
-    public function getId() {
-        return $this->id;
-    }
-
-
-    public $nom;
-    public $email;
-    public $telephone;  // Ajout du champ téléphone
-    public $sujet;
-    public $message;
-    public $id;
-    public $statut;  // Ajout de la propriété statut
-
-    // Constructeur avec téléphone et statut
-    public function __construct($nom, $email, $telephone, $sujet, $message = null, $statut = 'en cours', $id = null) {
-        $this->nom = $nom;
-        $this->email = $email;
-        $this->telephone = $telephone;  // Initialisation du téléphone
-        $this->sujet = $sujet;
-        $this->message = $message;
-        $this->statut = $statut;  // Initialisation du statut (par défaut à 'en cours')
-        $this->id = $id;
-    }
-
-    // Getter et Setter pour 'nom'
-    public function getNom() {
+    // Getter and Setter for 'nom'
+    public function getNom(): string {
         return $this->nom;
     }
 
-    public function setNom($nom) {
+    public function setNom(string $nom): void {
         $this->nom = $nom;
     }
 
-    // Getter et Setter pour 'email'
-    public function getEmail() {
+    // Getter and Setter for 'email'
+    public function getEmail(): string {
         return $this->email;
     }
 
-    public function setEmail($email) {
+    public function setEmail(string $email): void {
         $this->email = $email;
     }
-    
-    // Getter et Setter pour 'telephone'
-    public function getTelephone() {
+
+    // Getter and Setter for 'telephone'
+    public function getTelephone(): ?string {
         return $this->telephone;
     }
 
-    public function setTelephone($telephone) {
+    public function setTelephone(?string $telephone): void {
         $this->telephone = $telephone;
     }
 
-    // Getter et Setter pour 'sujet'
-    public function getSujet() {
+    // Getter and Setter for 'sujet'
+    public function getSujet(): string {
         return $this->sujet;
     }
 
-    public function setSujet($sujet) {
+    public function setSujet(string $sujet): void {
         $this->sujet = $sujet;
     }
 
-    // Getter et Setter pour 'message'
-    public function getMessage() {
+    // Getter and Setter for 'message'
+    public function getMessage(): ?string {
         return $this->message;
     }
 
-    // Setter for ID if needed (for update operations)
-    public function setId(int $id) {
+    public function setMessage(?string $message): void {
+        $this->message = $message;
+    }
+
+    // Getter and Setter for 'statut'
+    public function getStatut(): string {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): void {
+        $this->statut = $statut;
+    }
+
+    // Getter and Setter for 'id'
+    public function getId(): ?int {
+        return $this->id;
+    }
+
+    public function setId(?int $id): void {
         $this->id = $id;
     }
 }
-
-public function setMessage($message) {
-    $this->message = $message;
-}
-
-// Getter et Setter pour 'statut'
-public function getStatut() {
-    return $this->statut;
-}
-
-public function setStatut($statut) {
-    $this->statut = $statut;
-}
-
-// Getter et Setter pour 'id'
-public function getId() {
-    return $this->id;
-}
-
-public function setId($id) {
-    $this->id = $id;
-}
-
 ?>
-
-
-
