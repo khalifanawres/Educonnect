@@ -6,16 +6,16 @@ require_once(__DIR__ . '/../../../controller/ParticipationController.php');
 session_start();
 
 // Vérifiez si l'utilisateur est connecté
-if (!isset($_SESSION['user_id'])) {
-    die("Vous devez être connecté pour participer.");
+if (!isset($_SESSION['user'])) {
+    header('Location: ../../front_/login.php');
+    exit();
 }
 
 // Vérifiez si un ID de compétition est fourni
 if (!isset($_GET['id_competition'])) {
     die("Aucune compétition spécifiée.");
 }
-
-$user_id = $_SESSION['user_id']; 
+$user_id =  $_SESSION['user']['id'];
 $competition_id = intval($_GET['id_competition']);
 
 // Créer une nouvelle participation

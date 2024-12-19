@@ -95,32 +95,32 @@
       <div class="row align-items-center">
          <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6">
             <div class="banner__content">
-               <h4>
-                  contact,
-                  Feel free to contact
-               </h4>
+               <br></br>
+            <h4>
+                Bienvenue sur EduConnect,  
+                Votre passerelle vers le savoir et la collaboration !
+            </h4>
                <p class="b__space">
-                  
+                  EduConnect est une plateforme complète conçue pour faciliter l'éducation, la collaboration et une communication fluide entre étudiants, enseignants et institutions. Accédez à des ressources ou contactez notre équipe de support.
                </p>
+
                <ul class="ssd__list">
-                  <li>
-                    <span><i class="fa-solid fa-arrow-right"></i></span> <span>Unlimited Contact</span>
-                  </li>
-                  <li>
-                     <span><i class="fa-solid fa-arrow-right"></i></span> <span>Contact For Support Team</span>
-                  </li>
-                  <li>
-                     <span><i class="fa-solid fa-arrow-right"></i></span> <span>24/Hours Contact Our Team</span>
-                  </li>
+               <li>
+                           <span><i class="fa-solid fa-arrow-right"></i></span> <span>Participez à des compétitions éducatives passionnantes.</span>
+               </li>
+               <li>
+                  <span><i class="fa-solid fa-arrow-right"></i></span> <span>Contactez notre équipe de support dédiée pour obtenir de l'aide.</span>
+               </li>
+               <li>
+                  <span><i class="fa-solid fa-arrow-right"></i></span> <span>Collaborez avec des enseignants et travaillez sur des projets 24h/24 et 7j/7.</span>
+               </li>
                </ul>
-               <a href="#0" class="cmn--btn border__trans">
-                  <span>contact</span>
                </a>
             </div>
          </div>
          <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6">
             <div class="banner__Thumb">
-               <img src="../assets/img/hosting/contact.png" alt="about-img">
+               <img src="assets/img/logo/ed.png" alt="Contact our team">
             </div>
          </div>
       </div>
