@@ -84,18 +84,6 @@
                            <span>contact administrateur</span>
                         </a>
                      </li>
-                     
-                  </ul>
-               </li>
-               <li class="btn--items">
-                  <a href="../front_/login.php" class="cmn--btn">
-                     <span>Connexion</span>
-                  </a>
-               </li>
-            </ul>
-            <a href="../front_/login.php" class="cmn--btn">
-               <span>Connexion</span>
-            </a>
          </div>
       </div>
    </header>
